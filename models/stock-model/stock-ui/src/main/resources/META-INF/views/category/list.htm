@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+<#include "/head.ftl">
+<#include "/scripts.ftl">
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/metronic/plugins/select2/select2_metro.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.css"/>
+    <link rel="stylesheet" href="${request.contextPath}/metronic/plugins/fuelux/css/tree-metronic.css"/>
+    <!-- END PAGE LEVEL STYLES -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script type="text/javascript" src="${request.contextPath}/metronic/plugins/select2/select2.min.js"></script>
+    <script type="text/javascript"
+            src="${request.contextPath}/metronic/plugins/data-tables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.js"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script src="${request.contextPath}/metronic/scripts/table-advanced.js"></script>
+    <script src="${request.contextPath}/metronic/plugins/fuelux/js/tree.min.js"></script>
+    <style media="screen" type="text/css">
+        .material-item {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<#include "/page_head.ftl">
+<div class="clearfix"></div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="page-breadcrumb breadcrumb">
+
+    <li class="btn-group">
+                        <a href="#" class="btn blue" id="tree0" onclick="addTree(id)"><span>新增大分类</span></a>
+                    </li>
+
+    <li>
+                        <i class="icon-home"></i>F
+                        <a href="${request.contextPath}/home.html">Dashboard</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">物料管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">物料分类</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <form id="form" action="${request.contextPath}/apply/add.html" method="post" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="modal-header">
+                        <h3 class="modal-title">物料分类</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="MyTree2" class="tree tree-plus-minus"
+                                     style="max-height: 400px;overflow: scroll;">
+                                    <div class="tree-folder" style="display:none;">
+                                        <div class="tree-folder-header">
+                                            <i class="icon-folder-close"></i>
+                                            <div class="tree-folder-name"></div>
+                                        </div>
+                                        <div class="tree-folder-content"></div>
+                                        <div class="tree-loader" style="display:none"></div>
+                                    </div>
+                                    <div class="tree-item" style="display:none;">
+                                        <i class="tree-dot"></i>
+                                        <div class="tree-item-name"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="material-property-modal" class="modal fade" tabindex="-1" aria-hidden="true"
+                         style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" onclick="Close()" data-dismiss="modal"
+                                            aria-hidden="true"></button>
+                                    <h4 class="modal-title" id="titleModel">&nbsp;</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <input type="hidden" id="fatherId">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">英文名</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" placeholder="请填写英文名" id="code" type="text" onchange="specialCharValidate(id,value)" maxlength="16">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">中文名</label>
+                                            <div class="col-md-8">
+                                                <input class="form-control" placeholder="请填写NAME" id="name" type="text" onchange="specialCharValidate(id,value)" maxlength="10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" data-dismiss="modal" onclick="Close()" class="btn">关闭</button>
+
+                                    <button type="button" id="sureButton" class="btn yellow" onclick="saveData()">确定</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<#include "/foot.ftl">
+<script type="application/javascript">
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+    });
+</script>
+<script src="${request.contextPath}/js/category/tree-category.js" type="text/javascript"></script>
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

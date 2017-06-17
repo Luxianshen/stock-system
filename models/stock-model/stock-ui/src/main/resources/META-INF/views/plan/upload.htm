@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+<title>Web控制台</title> 
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<#include "/scripts.ftl">
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+	<#include "/page_head.ftl">
+
+	<div class="clearfix"></div>
+
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container">
+		<#include "/page_sidebar.ftl">
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<#-- //TODO inert main content into here -->
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+					<!--<h3 class="page-title">    大标题 <small>标题描述</small></h3>-->
+					<ul class="page-breadcrumb breadcrumb">
+						<li><i class="icon-home"></i> 
+							<a href="index.html">主页</a>
+							<i class="icon-angle-right"></i>
+						</li>
+						<li><a href="#">盘点记录</a> <i class="icon-angle-right"></i></li>
+						<li><a href="#">上传盘点记录</a></li>
+					</ul>
+					<!-- END PAGE TITLE & BREADCRUMB--><!-- ${request.contextPath}/plan/save.html -->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<form id="uploadForm" action="" enctype="multipart/form-data" class="form-horizontal">
+						<input type="hidden" name="planId" id="planId" value="${checkPlan.id!}"/>
+						<input type="hidden" name="fileExt" id="fileExt" />
+						<div class="form-body">
+							<h3 class="form-section">盘点计划基本信息</h3>
+							<div class="row">
+								<div class="col-md-5">
+									<div class="form-group">
+										<label class="control-label col-md-6">计划名称:</label>
+										<div class="col-md-6">
+											<p class="form-control-static">${checkPlan.planName}</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-7">
+									<div class="form-group">
+										<label class="control-label col-md-3">盘点仓库:</label>
+										<div class="col-md-9">
+											<p class="form-control-static">${warehouseInfo.name}</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5">
+									<div class="form-group">
+										<label class="control-label col-md-6">盘点物料:</label>
+										<div class="col-md-6">
+											<p class="form-control-static">${checkPlan.checkMaterial}</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-7">
+									<div class="form-group">
+										<label class="control-label col-md-3">盘点比例:</label>
+										<div class="col-md-9">
+											<p class="form-control-static">${checkPlan.checkProportion} %</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5">
+									<div class="form-group">
+										<label class="control-label col-md-6">应当盘点数量:</label>
+										<div class="col-md-6">
+											<p class="form-control-static">${checkPlan.shouldCheckNum}</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-md-3"><span class="required">*</span>盘点记录：</label>
+								<div class="col-md-4">
+									<input type="file" class="form-control" name="fileName" id="fileName"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="button" class="btn blue" id="a_preview_now">预览</button>
+								<button type="button" class="btn blue" id="a_cancle_now">取消</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+	
+	<#include "/foot.ftl"> 
+	<script>
+	    jQuery(document).ready(function() {
+	        App.init();
+	        
+	        $("#a_preview_now").click(function(){
+	    		var fileName = $.trim($("#fileName").val());
+	    		var fileExt = fileName.substring(fileName.lastIndexOf("."), fileName.length);
+	    		fileExt = fileExt.toLowerCase();
+
+	    		if (fileName == "") {
+	    			alert("请选择盘点记录！");
+	    			return false;
+	    		}
+	    		if (fileExt.length == 4 && fileExt != '.xls') {
+	    			alert("导入数据必须是xls或xlsx格式文件！");
+	    			return false;
+	    		}
+	    		if (fileExt.length == 5 && fileExt != '.xlsx') {
+	    			alert("导入数据必须是xls或xlsx格式文件！");
+	    			return false;
+	    		}
+	    		
+	    		$("#fileExt").val(fileExt);
+	    		$("#uploadForm").attr("action", "/plan/preview.html");
+	    		$("#uploadForm").attr("method","POST"); 
+	    		$("#uploadForm").submit(); 
+	    	});
+	        
+	        $("#a_cancle_now").click(function(){
+	        	$("#planId").val("");
+	        	$("#fileExt").val("");
+	        	$("#uploadForm").attr("action", "/plan/recordlist.html");
+	    		$("#uploadForm").attr("method","POST"); 
+	    		$("#uploadForm").submit(); 
+	    	}); 
+	    });
+    </script> 
+     
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+<title>Web控制台</title> 
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<#include "/scripts.ftl">
+
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+	<#include "/page_head.ftl">
+
+	<div class="clearfix"></div>
+
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container">
+		<#include "/page_sidebar.ftl">
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<#-- //TODO inert main content into here -->
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+					<!--<h3 class="page-title">  大标题 <small>标题描述</small></h3>-->
+					<ul class="page-breadcrumb breadcrumb">
+						<li><i class="icon-home"></i> 
+							<a href="index.html">主页</a>
+							<i class="icon-angle-right"></i>
+						</li>
+						<li><a href="#">盘点记录</a> <i class="icon-angle-right"></i></li>
+						<li><a href="#">盘点记录列表</a></li>
+					</ul>
+					<!-- END PAGE TITLE & BREADCRUMB-->
+				</div>
+			</div>
+			
+			<div class="portlet-body">
+				<form action="${request.contextPath}/plan/conditionRecord.html" method="post">
+					<input type="hidden" id="tempCheckStatus" name="tempCheckStatus" value="${checkStatus!}" > 
+					<div class="row">
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<label for="planName">计划名称</label> 
+								<input type="text" class="form-control" id="planName" name="planName" value="${planName!}">
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<label for="checkMaterial">盘点物料</label> 
+								<input type="text" class="form-control" id="checkMaterial" name="checkMaterial" value="${checkMaterial!}">
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<label for="checkProportion">盘点比例</label> 
+								<input type="text" class="form-control" id="checkProportion" name="checkProportion" value="${checkProportion!}">
+							</div>
+						</div>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<label for="checkStatus">盘点比例</label> 
+								<select class="form-control" name="checkStatus" id="checkStatus" >  
+										<option value="">盘点状态</option> 
+										<option value="0">未开始</option> 
+										<option value="1">已完成</option> 
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-5"></div>
+						<div class="col-md-2">
+							<button type="submit" class="btn blue btn-block" id="a_search_btn">查询
+							<i class="m-icon-swapright m-icon-white"></i></button>
+						</div>
+						<div class="col-md-5"></div>
+					</div>
+				</form>
+
+				<form id="hiddenForm" action="" enctype="multipart/form-data">
+					<input type="hidden" name="planId" id="planId">
+				</form>
+
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-advance table-hover">
+						<thead>
+							<tr>
+								<th>盘点人</th>
+								<th>计划名称</th>
+								<th>盘点比例</th>
+								<th>盘点物料</th>
+								<th>计划盘点时间</th>
+								<th>实际盘点时间</th>
+								<th>差异数</th>
+								<th>盘点状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#if planRecordList??> 
+							<#list planRecordList.list as planRecordList>
+							<tr>
+								<td>${planRecordList.checkBy!}</td>
+								<td>${planRecordList.planName!}</td>
+								<td>${planRecordList.checkProportion!}%</td>
+								<td>${planRecordList.checkMaterial!}</td>
+								<td>${planRecordList.planTime?string("yyyy-MM-dd HH:mm")}</td>
+								<td> <#if planRecordList.checkTime??>
+										${planRecordList.checkTime?string("yyyy-MM-dd HH:mm")}
+									</#if>
+								</td>
+								<td>${planRecordList.differNum!}</td>
+								<td>
+								   <#if planRecordList.checkResult.checkStatus??>
+								   	  <#if planRecordList.checkResult.checkStatus == 0>未开始</#if>
+								   	  <#if planRecordList.checkResult.checkStatus == 1>已完成</#if>
+								   </#if>
+								</td>
+								<td>
+								    <#if planRecordList.operate??>
+										<#if planRecordList.operate == "importRecord">
+										<button onclick="${planRecordList.operate!}('${planRecordList.id!}')" class="btn default btn-xs purple">导入盘点明细</button>
+										<#else >
+										<button onclick="${planRecordList.operate!}('${planRecordList.id!}')" class="btn default btn-xs purple">盘点详情列表</button>
+										</#if>
+									</#if>
+								</td>
+							</tr>
+							</#list> 
+							</#if>
+						</tbody>
+					
+					</table>
+				</div>
+				<@page result=planRecordList></@page>
+			</div>
+			
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+
+	<#include "/foot.ftl"> 
+	<script>
+	    jQuery(document).ready(function() {
+	        App.init();
+	        $("#checkStatus").val($("#tempCheckStatus").val());
+	        
+	    });
+    </script>
+    
+    <script type="text/javascript">
+    	function importRecord(planId){
+    		$("#planId").val(planId);
+    		$("#hiddenForm").attr("action", "/plan/toUpload.html");
+    		$("#hiddenForm").attr("method","POST"); 
+    		$("#hiddenForm").submit(); 
+    	}
+    </script>
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

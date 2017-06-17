@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.ManagerMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Manager" id="managerResultType">
+        <id property="ID" column="ID" javaType="java.lang.String"/>
+        <result property="NAME" column="NAME" javaType="java.lang.String"/>
+    </resultMap>
+
+
+
+    <select id="findAllManager" resultType="com.zjht.inventory.stock.entity.Manager">
+        SELECT * FROM T_MANAGER
+    </select>
+
+
+
+</mapper>

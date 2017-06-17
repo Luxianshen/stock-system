@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>处理记录</title>
+    <#include "/head.ftl">
+        </head>
+        <!-- END HEAD -->
+        <!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+    <div class="clearfix"></div>
+
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container">
+        <#include "/page_sidebar.ftl">
+            <!-- BEGIN PAGE -->
+            <div class="page-content">
+                <#-- //TODO inert main content into here  -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li>
+                                    <i class="icon-home"></i>
+                                    <a href="index.html">主页</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li>
+                                    <a href="#">分类管理</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li><a href="#">所有分类</a></li>
+                            </ul>
+
+                            <div class="portlet">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-advance table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>事项描述</th>
+                                            <th>创建时间</th>
+                                            <th>处理人</th>
+                                            <th>处理时间</th>
+                                            <th>处理说明</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                        <#if todoList??>
+                                            <#list todoList.list as todoList>
+                                                <tr class="odd">
+                                                    <td>${todoList.MATTER_DESCRIBE!}</td>
+                                                    <td>${todoList.CREATE_TIME?string("yyyy-MM-dd HH:mm")}</td>
+                                                    <td>${todoList.HANDLE_BY!}</td>
+                                                    <td>${todoList.HANDLE_TIME?string("yyyy-MM-dd HH:mm")}</td>
+                                                    <td>
+                                                        <#if todoList.HANDLE_RESULT??>
+                                                            <#if todoList.HANDLE_RESULT==0>
+                                                                <span><input type="text" name='list'
+                                                                             class="form-control"></span>
+                                                                <#else> ${todoList.HANDLE_REMARK!}
+                                                            </#if>
+                                                        </#if>
+                                                    </td>
+                                                </tr>
+                                            </#list>
+                                        </#if>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <@page result=todoList></@page>
+                    </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END PAGE -->
+    </div>
+    <!-- END CONTAINER -->
+    <#include "/foot.ftl">
+        <#include "/scripts.ftl">
+            <script>
+                jQuery(document).ready(function () {
+                    App.init(); // initlayout and core plugins
+                });
+            </script>
+            <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

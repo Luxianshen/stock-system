@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+<#include "head.ftl">
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+         
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+
+
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<script>
+    jQuery(document).ready(function() {
+        App.init(); // initlayout and core plugins
+    });
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

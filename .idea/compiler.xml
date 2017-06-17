@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+      <entry name="!?*.aj" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Annotation profile for stock-api" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="stock-api" />
+      </profile>
+      <profile default="false" name="Annotation profile for stock-dao" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="stock-dao" />
+      </profile>
+      <profile default="false" name="Annotation profile for stock-service" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="stock-service" />
+      </profile>
+      <profile default="false" name="Annotation profile for stock-ui" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="stock-ui" />
+      </profile>
+      <profile default="false" name="Annotation profile for webapp" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="webapp" />
+      </profile>
+      <profile default="false" name="Annotation profile for interface-ui" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="interface-ui" />
+      </profile>
+      <profile default="false" name="Annotation profile for web-commons" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="web-commons" />
+      </profile>
+      <profile default="false" name="Annotation profile for commons-component" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="commons-component" />
+      </profile>
+      <profile default="false" name="Annotation profile for commons-database" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="commons-database" />
+      </profile>
+      <profile default="false" name="Annotation profile for test-api" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="test-api" />
+      </profile>
+      <profile default="false" name="Annotation profile for test-service" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="test-service" />
+      </profile>
+      <profile default="false" name="Annotation profile for test-dao" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="test-dao" />
+      </profile>
+      <profile default="false" name="Annotation profile for test-ui" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="test-ui" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="commons" target="1.8" />
+      <module name="commons-component" target="1.8" />
+      <module name="commons-database" target="1.8" />
+      <module name="extensions-interface" target="1.8" />
+      <module name="extensions-model" target="1.8" />
+      <module name="interface-ui" target="1.8" />
+      <module name="inventory" target="1.8" />
+      <module name="models" target="1.8" />
+      <module name="stock-api" target="1.8" />
+      <module name="stock-dao" target="1.8" />
+      <module name="stock-model" target="1.8" />
+      <module name="stock-service" target="1.8" />
+      <module name="stock-ui" target="1.8" />
+      <module name="test-api" target="1.8" />
+      <module name="test-dao" target="1.8" />
+      <module name="test-model" target="1.8" />
+      <module name="test-service" target="1.8" />
+      <module name="test-ui" target="1.8" />
+      <module name="web" target="1.8" />
+      <module name="web-commons" target="1.8" />
+      <module name="webapp" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

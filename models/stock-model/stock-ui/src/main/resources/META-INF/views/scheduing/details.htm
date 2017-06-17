@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+<#include "/head.ftl">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <!--<h3 class="page-title">
+                    大标题 <small>标题描述</small>
+                </h3>-->
+                <ul class="page-breadcrumb breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">Dashboard</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">库存管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">出/入库记录</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">出/入库明细</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN FORM-->
+                <form class="form-horizontal" role="form">
+                    <div class="form-body">
+                        <h3 class="form-section">记录信息</h3>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">流水号</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.systrace!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">申请类型</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.inOutType!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">申请编号</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.applyId!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">订单编号</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.orderId!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">操作人</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.operator!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">操作时间</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.operateTime?string("yyyy-MM-dd HH:mm")!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">领机人</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${scheduing.drawingPerson!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h3 class="form-section">明细信息</h3>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">物料名称</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${detail.materielId!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">库存明细</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${detail.inventoryDetailedId!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">操作数量</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static">${detail.operateNum!}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h3 class="form-section">库存明细</h3>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-advance table-hover">
+                                <thead>
+                                <tr>
+                                <#if metadatas??>
+                                    <#list metadatas as metadata>
+                                        <th>${metadata.name}</th>
+                                    </#list>
+                                </#if>
+                                </tr>
+                                </thead>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+
+                                <#if propertyMap??>
+                                    <#list propertyMap as map>
+                                    <tr>
+                                        <#list map?keys as itemKey>
+                                            <td >${map[itemKey]}</td>
+                                        </#list>
+                                    </tr>
+                                    </#list>
+                                </#if>
+
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                    <!-- END PAGE -->
+            </div>
+            <div class="form-actions fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-offset-3 col-md-9">
+                            <a href="record.html" class="btn default">返回</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>
+
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<script type="text/javascript"
+        src="${request.contextPath}/metronic/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.js"></script>
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/metronic/plugins/select2/select2_metro.css"/>
+<!-- END PAGE LEVEL STYLES -->
+
+
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/select2/select2.min.js"></script>
+<script type="text/javascript"
+        src="${request.contextPath}/metronic/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="${request.contextPath}/metronic/scripts/table-advanced.js"></script>
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+        if (!jQuery().dataTable) {
+            return;
+        }
+
+    });
+    $(".row-details").click(function(){
+        var css = $(this).attr("class");
+        var detail = $(this).parent().parent().next();
+        if(css.indexOf("close")>0){
+            //显示详情
+            detail.show();
+            $(this).attr("class","row-details row-details-open");
+        }else{
+            //隐藏详情
+            detail.hide();
+            $(this).attr("class","row-details row-details-close");
+        }
+    });
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

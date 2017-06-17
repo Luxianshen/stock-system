@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>commons</artifactId>
+        <groupId>com.zjht</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>commons-component</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.zjht</groupId>
+            <artifactId>commons-database</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-api</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-core</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-model</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-instrumentation</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-web</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-shiro</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-spring</artifactId>
+            <version>${massy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.smarabbit.massy</groupId>
+            <artifactId>massy-test</artifactId>
+            <version>${massy.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+
+
+
+        <!-- excel util-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.9</version>
+        </dependency>
+        <!-- excel util-->
+
+    </dependencies>
+</project>

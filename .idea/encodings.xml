@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/commons/commons-component" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/commons/commons-database" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/extensions-model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/extensions-model/extensions-interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/extensions-model/extensions-interface/interface-ui" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/stock-model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/stock-model/stock-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/stock-model/stock-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/stock-model/stock-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/stock-model/stock-ui" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/test-model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/test-model/test-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/test-model/test-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/test-model/test-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/models/test-model/test-ui" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/web/web-commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/web/webapp" charset="UTF-8" />
+  </component>
+</project>

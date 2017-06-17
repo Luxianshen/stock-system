@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.MaterialMapper">
+    <resultMap type="com.zjht.inventory.stock.entity.Materiel" id="materialResultMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+        <result property="materielCategoryId" column="MATERIEL_CATEGORY_ID" javaType="java.lang.Long"/>
+        <result property="type" column="TYPE" javaType="java.lang.Long"/>
+        <result property="mappingPrivateTable" column="MAPPING_PRIVATE_TABLE" javaType="java.lang.String"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date"/>
+
+    </resultMap>
+
+    <resultMap type="com.zjht.inventory.stock.entity.Metadata" id="metedataResultMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="dataType" column="DATATYPE" javaType="java.lang.String"/>
+        <result property="length" column="LENGTH" javaType="java.lang.Long"/>
+        <result property="dictionaryCode" column="DICTIONARY_CODE" javaType="java.lang.String"/>
+        <result property="statistics" column="STATISTICS" javaType="java.lang.Long"/>
+        <result property="require" column="REQUIRE" javaType="java.lang.Long"/>
+        <result property="uniqued" column="UNIQUED" javaType="java.lang.Long"/>
+    </resultMap>
+
+    <insert id="addNewMaterial"  parameterType="com.zjht.inventory.stock.entity.Materiel">
+        INSERT INTO T_MATERIEL(
+        ID,
+        CODE,
+        NAME,
+        MATERIEL_CATEGORY_ID,
+        TYPE,
+        MAPPING_PRIVATE_TABLE,
+        CREATE_TIME)
+        VALUES(
+        #{material.id},
+        #{material.code},#{material.name},
+        #{material.materielCategoryId},#{material.type},
+        #{material.mappingPrivateTable},#{material.createTime})
+    </insert>
+
+    <select id="findById" resultMap="materialResultMap">
+        SELECT ID,CODE,NAME,MATERIEL_CATEGORY_ID,TYPE,MAPPING_PRIVATE_TABLE,CREATE_TIME FROM T_MATERIEL WHERE ID = #{id}
+    </select>
+
+    <select id="findByTable" resultMap="materialResultMap">
+        SELECT ID,CODE,NAME,MATERIEL_CATEGORY_ID,TYPE,MAPPING_PRIVATE_TABLE,CREATE_TIME FROM T_MATERIEL WHERE MAPPING_PRIVATE_TABLE = #{table}
+    </select>
+
+    <select id="findByCategory" resultMap="materialResultMap">
+        SELECT MATERIEL_CATEGORY_ID FROM T_MATERIEL
+    </select>
+
+    <select id="findList" resultMap="materialResultMap">
+        SELECT * FROM T_MATERIEL order by CREATE_TIME desc
+    </select>
+    <select id="findMeteDataName" resultMap="metedataResultMap">
+        SELECT * FROM T_MATERIEL_METADATA WHERE MATERIEL_ID = #{id}
+    </select>
+
+    <select id="findByCategoryId" resultMap="materialResultMap">
+        SELECT ID,NAME FROM T_MATERIEL WHERE MATERIEL_CATEGORY_ID = #{id}
+    </select>
+
+    <!--<update id="update"  parameterType="com.zjht.inventory.test.entity.Test">
+       UPDATE TEST SET
+        NAME =#{test.name}
+        WHERE ID=#{test.id}
+    </update>-->
+    <select id="findBySearchCode" resultMap="materialResultMap">
+        SELECT ID,NAME FROM T_MATERIEL WHERE NAME = #{searchcode}
+    </select>
+    
+    <select id="fineMaterialByWarehouseId" resultMap="materialResultMap">
+   		 SELECT T_MATERIEL.* FROM T_WAREHOUSE_MATERIAL , T_MATERIEL 
+             WHERE T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+             AND T_WAREHOUSE_MATERIAL.WAREHOUSE_ID = #{warehouseId}
+    </select>
+
+    <insert id="addNewMetadataNoDictionary" parameterType="com.zjht.inventory.stock.entity.Metadata">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT T_MATERIEL_METADATA_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_MATERIEL_METADATA (
+        ID,
+        NAME,
+        CODE,
+        DATATYPE,
+        LENGTH ,
+        MATERIEL_ID,
+        STATISTICS,
+        REQUIRE,
+        UNIQUED)
+        VALUES
+        (
+        #{id},
+        #{list.name},
+        #{list.code},
+        #{list.dataType},
+        #{list.length},
+        #{list.materielId},
+        #{list.statistics},
+        #{list.require},
+        #{list.uniqued}
+        )
+    </insert>
+
+    <insert id="addNewMetadata" parameterType="com.zjht.inventory.stock.entity.Metadata">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT T_MATERIEL_METADATA_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_MATERIEL_METADATA (
+        ID,
+        NAME,
+        CODE,
+        DATATYPE,
+        LENGTH ,
+        MATERIEL_ID,
+        DICTIONARY_CODE,
+        STATISTICS,
+        REQUIRE,
+        UNIQUED)
+        VALUES
+        (
+        #{id},
+        #{list.name},
+        #{list.code},
+        #{list.dataType},
+        #{list.length},
+        #{list.materielId},
+        #{list.dictionaryCode},
+        #{list.statistics},
+        #{list.require},
+        #{list.uniqued}
+        )
+    </insert>
+
+    <select id="getAddId" resultType="Long">
+           SELECT T_MATERIEL_SEQ.NEXTVAL FROM DUAL
+    </select>
+
+    <update id="createTable">
+       ${sql}
+    </update>
+
+    <select id="findMeteData" resultMap="metedataResultMap">
+        SELECT * FROM T_MATERIEL_METADATA WHERE MATERIEL_ID = #{id}
+    </select>
+
+    <update id="updateOldMetadata" parameterType="com.zjht.inventory.stock.entity.Metadata">
+        UPDATE T_MATERIEL_METADATA
+        <trim prefix="set" suffixOverrides=",">
+            <if test="metadata.name!=''">NAME=#{metadata.name},</if>
+            <if test="metadata.length!=null">LENGTH=#{metadata.length},</if>
+            <if test="metadata.remark!=null">REMARK=#{metadata.remark},</if>
+            <if test="metadata.statistics!=null">STATISTICS=#{metadata.statistics},</if>
+            <if test="metadata.require!=null">REQUIRE=#{metadata.require},</if>
+            <if test="metadata.uniqued!=null">UNIQUED=#{metadata.uniqued},</if>
+        </trim>
+        WHERE ID=#{metadata.id}
+    </update>
+
+    <update id="updateTable" >
+        ${sql}
+    </update>
+
+    <select id="searchList" resultMap="materialResultMap">
+        SELECT * FROM T_MATERIEL
+        <where>
+            <if test="material.code!=null and material.code!='' ">
+                AND CODE LIKE concat(concat('%',#{material.code}),'%')
+            </if>
+            <if test="material.name!= null and material.name!='' ">
+                AND NAME LIKE concat(concat('%',#{material.name}),'%')
+            </if>
+            <if test="material.type!=null ">
+                AND TYPE = #{material.type}
+            </if>
+        </where>
+        order by CREATE_TIME desc
+    </select>
+
+    <select id="findMaterielCode" resultMap="materialResultMap">
+        SELECT CODE FROM T_MATERIEL
+    </select>
+
+    <select id="findMaterialList" resultMap="materialResultMap">
+        SELECT * FROM T_MATERIEL
+    </select>
+    
+    <select id="findByParams" parameterType="Map" resultMap="materialResultMap">
+   	    SELECT T_MATERIEL.* 
+			FROM T_WAREHOUSE_MATERIAL,T_MATERIEL
+			WHERE T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+			<if test="id!=null and id!='' ">
+				AND T_MATERIEL.MATERIEL_CATEGORY_ID = #{id}
+			</if>
+			<if test="warehouseId!=null and warehouseId!='' ">
+				AND T_WAREHOUSE_MATERIAL.WAREHOUSE_ID = #{warehouseId}
+			</if>
+    </select>
+
+	<select id="findByMaterielIds" resultMap="materialResultMap">
+		SELECT * FROM T_MATERIEL WHERE 1=1 AND ID IN 
+		<foreach collection="materielList" item="materielId" open="(" close=")" separator=",">
+	   	    #{materielId}
+	    </foreach>
+	</select>
+    
+
+    <select id="findByCategoryIdForInterface" resultMap="materialResultMap">
+        SELECT ID,CODE,NAME,TYPE,CREATE_TIME FROM T_MATERIEL WHERE MATERIEL_CATEGORY_ID = #{id}
+    </select>
+
+    <select id="getTableInfo" resultType="java.util.Map">
+        select TABLE_NAME from all_tables WHERE  TABLE_NAME = #{tableName}
+    </select>
+
+    <select id="findMaterialByCode" resultMap="materialResultMap">
+        SELECT * FROM T_MATERIEL WHERE CODE=#{code}
+    </select>
+</mapper>

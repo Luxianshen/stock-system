@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.CheckDetailMapper">
+ 	<resultMap type="com.zjht.inventory.stock.entity.CheckDetail" id="checkDetailResultMap">
+		<id property="id" column="ID" javaType="java.lang.Long"/>
+		<result property="checkResultId" column="CHECK_RESULT_ID" javaType="java.lang.String"/>
+		<result property="differType" column="DIFFER_TYPE" javaType="java.lang.Long"/>
+		<result property="materielId" column="MATERIEL_ID" javaType="java.lang.String"/>
+		<result property="detailedId" column="DETAILED_ID" javaType="java.lang.String" />
+		<result property="systemStatus" column="SYSTEM_STATUS" javaType="java.lang.Long"/>
+		<result property="checkStatus" column="CHECK_STATUS" javaType="java.lang.Long"/>
+		<result property="handleBy" column="HANDLE_BY" javaType="java.lang.String"/>
+		<result property="handleTime" column="HANDLE_TIME" javaType="java.util.Date" />
+		<result property="handleResult" column="HANDLE_RESULT" javaType="java.lang.Long"/>
+		<result property="handleRemark" column="HANDLE_REMARK" javaType="java.lang.String"/>
+	</resultMap> 
+	
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.LockMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Lock" id="lockMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="materielTypeId" column="MATERIEL_TYPE_ID" javaType="java.lang.Long"/>
+        <result property="materielId" column="MATERIEL_ID" javaType="java.lang.Long"/>
+        <result property="lockNum" column="LOCK_NUM" javaType="java.lang.Long"/>
+        <result property="applyId" column="APPLY_ID" javaType="java.lang.Long"/>
+        <result property="warehouseId" column="WAREHOUSE_ID" javaType="java.lang.Long"/>
+        <association property="lockProperties" column="ID" select="findLockPropertiesById"/>
+    </resultMap>
+
+    <resultMap type="com.zjht.inventory.stock.entity.LockProperty" id="LockPropertyMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="lockId" column="LOCK_ID" javaType="java.lang.Long"/>
+        <result property="property" column="PROPERTY" javaType="java.lang.String"/>
+        <result property="value" column="VALUE" javaType="java.lang.String"/>
+    </resultMap>
+
+    <insert id="saveLock" parameterType="com.zjht.inventory.stock.entity.Lock">
+        INSERT INTO T_LOCK(
+                ID,
+                MATERIEL_TYPE_ID,
+                MATERIEL_ID,
+                LOCK_NUM,
+                APPLY_ID,
+                WAREHOUSE_ID)
+        VALUES (#{lock.id},#{lock.materielTypeId},#{lock.materielId},#{lock.lockNum},#{lock.applyId},#{lock.warehouseId})
+    </insert>
+
+    <insert id="saveLockProperty" parameterType="com.zjht.inventory.stock.entity.LockProperty">
+        INSERT INTO T_LOCK_PROPERTY(
+                ID,
+                LOCK_ID,
+                PROPERTY,
+                "VALUE")
+        VALUES (#{lockProperty.id},#{lockProperty.lockId},#{lockProperty.property},
+        #{lockProperty.value})
+    </insert>
+
+    <select id="findByWarehouseMaterial" resultMap="lockMap">
+      SELECT * FROM T_LOCK
+      <where>
+          WAREHOUSE_ID=#{warehouseId}
+          AND
+          MATERIEL_ID=#{materielId}
+      </where>
+    </select>
+
+    <select id="findLockPropertiesById" resultMap="LockPropertyMap">
+        SELECT * FROM T_LOCK_PROPERTY
+        <where>
+          LOCK_ID = #{ID}
+        </where>
+    </select>
+
+
+    <update id="deleteLockPropertyByLockId">
+        DELETE FROM T_LOCK_PROPERTY WHERE LOCK_ID=#{lockId}
+    </update>
+
+    <update id="deleteById">
+        DELETE FROM T_LOCK WHERE ID=#{id}
+    </update>
+
+
+
+    <select id="findByApplyId" resultMap="lockMap">
+        SELECT * FROM T_LOCK
+    </select>
+</mapper>

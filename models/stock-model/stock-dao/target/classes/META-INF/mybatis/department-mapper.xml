@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.DepartmentMapper">
+
+    <select id="getDepartmentList" resultType="com.zjht.inventory.stock.entity.Department">
+        SELECT  ID, CODE, NAME FROM T_DEPARTMENT WHERE COMPANY_CODE = #{companyCode}
+    </select>
+</mapper>

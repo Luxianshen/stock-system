@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/html">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+<#include "/head.ftl">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<#include "/page_head.ftl">
+<div class="clearfix"></div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="page-breadcrumb breadcrumb">
+            <li class="btn-group">
+                <a href="addPre.html" class="btn blue"><span>新增物料</span></a>
+            </li>
+            <li>
+                <i class="icon-home"></i>
+                <a href="${request.contextPath}/home.html">Dashboard</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">物料管理</a>
+                <i class="icon-angle-right"></i>
+            </li>
+            <li>
+                <a href="#">物料列表</a>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/material/search.html" class="portlet-body" id="searchDiv" method="get">
+                    <!-- 搜索内容start -->
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="materilCode">物料代码</label>
+                                <input type="text" class="form-control" id="materialCode"
+                                       name="code" maxlength="16" onchange="specialCharValidate(id,value)"
+                            <#if materialcode??>
+                                       value=${materialcode!}>
+                            <#else>
+                                placeholder="请输入物料代码">
+                            </#if>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="materilName">物料中文名</label>
+                                <input type="text" class="form-control" id="materialName"
+                                       name="name" maxlength="20" onchange="specialCharValidate(id,value)"
+                            <#if materialname??>
+                                       value=${materialname!}>
+                            <#else>
+                                placeholder="请输入物料中文名称">
+                            </#if>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="materialType">物料类型</label>
+                                <select  class="form-control" id="materialType"
+                                       name="type">
+                            <#if materialtype??>
+                                <#if materialtype==1>
+                                    <option value="1"> 按量</option>
+                                    <option value="2"> 按件</option>
+                                    <option value="">选择全部</option>
+                                <#else>
+                                    <option value="2"> 按件</option>
+                                    <option value="1"> 按量</option>
+                                    <option value="">选择全部</option>
+                                </#if>
+                            <#else>
+                                <option value="">选择全部</option>
+                                <option value="1"> 按量</option>
+                                <option value="2"> 按件</option>
+                            </#if>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+    <div class="col-md-5"></div>
+
+                    <div class="col-md-2">
+                        <input type="submit" value="搜索" class="btn blue btn-block" />
+                            <i class="m-icon-swapright m-icon-white"></i>
+                       <br>
+                    </div>
+
+                </form>
+                    <div class="col-md-5"></div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-advance table-hover">
+                                <thead>
+                                <tr>
+                                    <th>物料代码</th>
+                                    <th>物料名</th>
+                                    <th>物料类型</th>
+                                    <th>对应私有表名</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+
+                                <#if materialList??>
+                                    <#list materialList.list as materialList>
+                                    <tr class="odd">
+                                        <td>${materialList.code!}</td>
+                                        <td>${materialList.name!}</td>
+                                        <td><#if materialList.type==1>
+                                            按量
+                                            <#else >
+                                            按件
+                                            </#if>
+                                        </td>
+                                        <td>${materialList.mappingPrivateTable!}</td>
+                                        <td> ${materialList.createTime?string("yyyy-MM-dd HH:mm")}</td>
+                                        <td>
+									       <span>
+
+										     <a href="detail.html?materialId=${materialList.id!}"
+                                             class="btn default btn-xs blue">查看</a>
+
+                                           </span>
+                                            <span>
+                                            <#if materialList.type==2>
+
+                                            <a href="updatePre.html?materialId=${materialList.id!}" class="btn default btn-xs purple"> 修改</a>
+
+                                            </#if>
+                                            </span>
+
+                                        </td>
+                                    </tr>
+                                    </#list>
+                                </#if>
+                                </tbody>
+                            </table>
+                        </div>
+                    <@page result=materialList></@page>
+
+            </div>
+        </div>
+        <!-- END PAGE -->
+    </div>
+    <!-- END CONTAINER -->
+
+<#include "/scripts.ftl">
+<#include "/foot.ftl">
+
+    <script>
+        jQuery(document).ready(function () {
+            App.init(); // initlayout and core plugins
+        });
+        function specialCharValidate(id,val){
+            var pattern = new RegExp("[`~!@%#$^&*()=|{}':;',　\\[\\]<>/? \\.；：%……+￥（）【】‘”“'。，、？\\-\\_]");
+            if(val!=""){
+                if(pattern.test(val)){
+                    $("#"+id+"").val("");
+                    alert("输入值包含特殊字符！");
+                }
+            }
+        }
+    </script>
+
+    <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

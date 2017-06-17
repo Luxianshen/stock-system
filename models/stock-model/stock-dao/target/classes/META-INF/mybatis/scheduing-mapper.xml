@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.ScheduingMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Scheduing" id="scheduingMap">
+        <id property="id" column="ID" javaType="java.lang.String"/>
+        <result property="systrace" column="SYSTRACE" javaType="java.lang.String" />
+        <result property="inOutType" column="IN_OUT_TYPE" javaType="java.lang.Long" />
+        <result property="applyId" column="APPLY_ID" javaType="java.lang.String" />
+        <result property="orderId" column="ORDER_ID" javaType="java.lang.String" />
+        <result property="operator" column="OPERATOR" javaType="java.lang.String" />
+        <result property="operateTime" column="OPERATE_TIME" javaType="java.util.Date" />
+        <result property="drawingPerson" column="DRAWING_PERSON" javaType="java.lang.String" />
+    </resultMap>
+
+    <resultMap type="com.zjht.inventory.stock.entity.ScheduingDetail" id="scheduingDetailMap">
+        <id property="id" column="ID" javaType="java.lang.String"/>
+        <result property="systrace" column="SYSTRACE" javaType="java.lang.String" />
+        <result property="materielId" column="MATERIEL_ID" javaType="java.lang.String" />
+        <result property="inventoryDetailedId" column="INVENTORY_DETAILED_ID" javaType="java.lang.String" />
+        <result property="operateNum" column="OPERATE_NUM" javaType="java.lang.Long" />
+    </resultMap>
+
+    <select id="findBySystrace" resultMap="scheduingMap">
+      SELECT * FROM T_IN_OUT_RECORD a
+      <where>
+          1=1
+          <if test="systrace!=null and systrace!=''">
+              and a.SYSTRACE = #{systrace}
+          </if>
+      </where>
+      ORDER BY a.SYSTRACE
+    </select>
+
+    <select id="findDetailBySystrace" resultMap="scheduingDetailMap">
+      SELECT * FROM T_IN_OUT_DETAILED a
+      <where>
+          1=1
+          <if test="systrace!=null and systrace!=''">
+              and a.SYSTRACE = #{systrace}
+          </if>
+      </where>
+      ORDER BY a.SYSTRACE
+    </select>
+
+    <select id="findByPage" resultMap="scheduingMap">
+      SELECT * FROM T_IN_OUT_RECORD a
+      <include refid="findRecord"/>
+      ORDER BY a.OPERATE_TIME
+    </select>
+
+    <sql id="findRecord">
+        <where>
+            1=1
+            <if test="applyId!=null and applyId!=''">
+              and a.APPLY_ID = #{applyId}
+            </if>
+            <if test="orderId!=null and orderId!=''">
+              and a.ORDER_ID = #{orderId}
+            </if>
+            <if test="inOutType!=null and inOutType!=''">
+              and a.IN_OUT_TYPE = #{inOutType}
+            </if>
+            <if test="operator!=null and operator!=''">
+              and a.OPERATOR = #{operator}
+            </if>
+            <if test="drawingPerson!=null and drawingPerson!=''">
+              and a.DRAWING_PERSON = #{drawingPerson}
+            </if>
+            <include refid="timeRange"/>
+        </where>
+    </sql>
+    <!--
+        其他表需要用到时, 请阅读以下细则
+        1. 区间查询的表名须设置别名为a
+        2. 该表的查询时间字段应为CREATE_TIME
+    -->
+    <sql id="timeRange" >
+        <if test="startTime!=null and startTime!=''">
+            <if test="endTime!=null and endTime!=''">
+                and (a.OPERATE_TIME between to_date(#{startTime},'yyyy-MM-dd') AND to_date(#{endTime},'yyyy-MM-dd'))
+            </if>
+            <if test="endTime==null or endTime==''">
+                and (a.OPERATE_TIME >= to_date(#{startTime},'yyyy-MM-dd'))
+            </if>
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            <if test="startTime==null or startTime==''">
+                and (to_date(#{endTime},'yyyy-MM-dd') >= a.OPERATE_TIME)
+            </if>
+        </if>
+    </sql>
+
+</mapper>

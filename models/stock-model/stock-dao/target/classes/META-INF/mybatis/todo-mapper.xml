@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.TodoMapper">
+    <resultMap type="com.zjht.inventory.stock.entity.Todo" id="todoResultMap">
+        <id property="ID" column="ID" javaType="java.lang.String"/>
+        <result property="MATTER_DESCRIBE" column="MATTER_DESCRIBE" javaType="java.lang.String"/>
+        <result property="CREATE_TIME" column="CREATE_TIME" javaType="java.util.Date"/>
+        <result property="HANDLE_BY" column="HANDLE_BY" javaType="java.lang.String"/>
+        <result property="HANDLE_TIME" column="HANDLE_TIME" javaType="java.util.Date"/>
+        <result property="HANDLE_RESULT" column="HANDLE_RESULT" javaType="java.lang.Long"/>
+        <result property="HANDLE_REMARK" column="HANDLE_REMARK" javaType="java.lang.String"/>
+
+    </resultMap>
+
+
+
+    <!--<insert id="save" useGeneratedKeys="true"  parameterType="com.zjht.inventory.test.entity.Test">
+        INSERT INTO TEST(ID,NAME) VALUES (#{test.id},#{test.name})
+    </insert>-->
+
+
+
+    <select id="FindTodoList" resultMap="todoResultMap">
+        SELECT ID,MATTER_DESCRIBE,CREATE_TIME,HANDLE_BY,HANDLE_TIME,HANDLE_RESULT,HANDLE_REMARK FROM T_TODO WHERE HANDLE_RESULT=0
+    </select>
+
+    <select id="FindHandleList" resultMap="todoResultMap">
+        SELECT ID,MATTER_DESCRIBE,CREATE_TIME,HANDLE_BY,HANDLE_TIME,HANDLE_RESULT,HANDLE_REMARK FROM T_TODO WHERE HANDLE_RESULT=1
+    </select>
+
+    <update id="UpdateHandle"  parameterType="com.zjht.inventory.stock.entity.Todo">
+       UPDATE T_TODO SET
+        HANDLE_TIME=#{todo.HANDLE_TIME},
+        HANDLE_RESULT=1,
+        HANDLE_REMARK=#{todo.HANDLE_REMARK}
+        WHERE ID=#{todo.ID}
+    </update>
+
+</mapper>

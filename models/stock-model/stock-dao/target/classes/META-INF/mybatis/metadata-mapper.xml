@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.MetadataMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Metadata" id="metedataResultMap">
+        <id property="id" column="ID" javaType="java.lang.String"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="dataType" column="DATATYPE" javaType="java.lang.String"/>
+        <result property="length" column="LENGTH" javaType="java.lang.Long"/>
+        <result property="dictionaryCode" column="DICTIONARY_CODE" javaType="java.lang.String"/>
+
+    </resultMap>
+
+    <select id="findInventoryDetailBy" resultType="java.util.LinkedHashMap">
+        SELECT idl.ASSETS_NO,idl.STATUS,
+        tt.*
+        FROM ${table_name} tt left join T_INVENTORY_DETAILED idl on tt.INVENTORY_DETAILED_ID=idl.ID
+        <where>
+            1=1
+            <if test="id!=null and id!=''">
+               and idl.ID = #{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="FindDataBySql" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+    <select id="findMetadataByMaterialId" resultMap="metedataResultMap">
+        SELECT NAME,CODE,DATATYPE,LENGTH,DICTIONARY_CODE FROM T_MATERIEL_METADATA WHERE MATERIEL_ID = #{id}
+    </select>
+
+</mapper>

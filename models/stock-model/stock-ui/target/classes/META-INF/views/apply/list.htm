@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+    <#include "/head.ftl">
+    <style>
+        table{width:100%;border:0px solid #999;}
+        td{word-break: keep-all;white-space:nowrap;}
+        th{word-break: keep-all;white-space:nowrap;}
+    </style>
+        </head>
+        <!-- END HEAD -->
+        <!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+    <div class="clearfix"></div>
+
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container">
+        <#include "/page_sidebar.ftl">
+            <!-- BEGIN PAGE -->
+            <div class="page-content">
+                <#-- //TODO inert main content into here  -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                            <!--<h3 class="page-title">
+                                大标题 <small>标题描述</small>
+                            </h3>-->
+                            <ul class="page-breadcrumb breadcrumb">
+
+                                <li class="btn-group">
+                                    <a href="${request.contextPath}/apply/add.html" class="btn blue"><span>添加申请</span></a>
+                                </li>
+
+                                <li>
+                                    <i class="icon-home"></i>
+                                    <a href="${request.contextPath}/home.html">Dashboard</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li>
+                                    <a href="#">库存管理</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li><a href="#">申请列表</a></li>
+                            </ul>
+                            <!-- END PAGE TITLE & BREADCRUMB-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="booking-search">
+                                <form action="${request.contextPath}/apply/list.html" method="get"
+                                      role="form"enctype="application/x-www-form-urlencoded">
+                                    <div class="row form-group">
+                                        <div class="col-md-2">
+                                            <label class="control-label">申请类型</label>
+                                            <select name="applyType" class="form-control select2me" data-placeholder="Select...">
+                                                <option value="">选择..</option>
+                                                <#if types?exists>
+                                                    <#list types?keys as item>
+                                                        <option ${((apply.applyType?string == item)?string("selected='selected'",""))!} value="${item}">${types[item]!}</option>
+                                                    </#list>
+                                                </#if>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">订单编号</label>
+                                            <input maxlength="20" name="orderId" value="${apply.orderId!}" type="text" class="form-control" placeholder="输入订单编号">
+                                        </div>
+                                        <#--<div class="col-md-4"></div>-->
+                                        <div class="col-md-4">
+                                            <label class="control-label">申请时间</label>
+                                            <div class="input-group date-picker input-daterange" data-date="2012-10-11" data-date-format="yyyy-mm-dd">
+                                                <input id="defaultrange" type="text" class="form-control" name="startTime" value="${startTime!}">
+                                                <span class="input-group-addon">to</span>
+                                                <input id="reportrange" type="text" class="form-control" name="endTime" value="${endTime!}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="control-label">处理结果</label>
+                                            <select name="handleResult" class="form-control select2me" data-placeholder="Select...">
+                                                    <option value="">选择..</option>
+                                                    <option ${((apply.handleResult==1)?string("selected='selected'",""))!} value="1"> 未处理 </option>
+                                                    <option ${((apply.handleResult==2)?string("selected='selected'",""))!} value="2"> 已入库 </option>
+                                                    <option ${((apply.handleResult==3)?string("selected='selected'",""))!} value="3"> 已出库 </option>
+                                                    <option ${((apply.handleResult==5)?string("selected='selected'",""))!} value="5"> 已解锁 </option>
+                                                    <option ${((apply.handleResult==6)?string("selected='selected'",""))!} value="6"> 已作废 </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-2">
+                                            <button class="btn blue btn-block">搜索<i class="m-icon-swapright m-icon-white"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-5"></div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr hr-16 hr-dotted"></div>
+                    <div class="table-responsive" style="width:100%;overflow:auto;">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                                <tr align="center">
+                                    <th>订单编号</th>
+                                    <th>申请人</th>
+                                    <th>申请仓库</th>
+                                    <th>申请类型</th>
+                                    <th>申请说明</th>
+                                    <th>申请时间</th>
+                                    <#--<th>状态</th>-->
+                                    <th>处理人</th>
+                                    <th>处理结果</th>
+                                    <th>处理说明</th>
+                                    <th width="20%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <#if applies??>
+                                <#list applies.list as apply>
+                                    <tr align="left">
+                                        <td title="${apply.orderId!}">${apply.orderId!}</td>
+                                        <td>${apply.createBy!}</td>
+                                        <#--<td>${apply.warehouseBelong!}</td>-->
+                                        <td title="${apply.warehouseName!}">${apply.warehouseName!}</td>
+                                        <#--<td>${apply.applyType!}</td>-->
+                                        <td>${apply.applyTypeName!}</td>
+                                        <td title="${apply.remark!}">${apply.remark!}</td>
+                                        <td title="${(apply.createTime?string("yyyy-MM-dd HH:mm"))!}">${(apply.createTime?string("yyyy-MM-dd HH:mm"))!}</td>
+                                        <#--<td>${apply.status!}</td>-->
+                                        <td>${apply.handleBy!}</td>
+                                        <#--<td>${apply.handleResult!}</td>-->
+                                        <td>${apply.handleResultName!}</td>
+                                        <td title="${apply.handleRemark!}">${apply.handleRemark!}</td>
+                                        <td>
+                                            <#if apply?? && apply.handleResult?? && apply.handleResult==1 && apply.applyType!=STOCK_LOCK>
+
+                                                    <a href="${request.contextPath}/apply/handle.html?applyId=${apply.id!}" class="btn btn-sm default red<#---stripe-->"> 处理申请<i class="icon-tags"></i></a>
+
+                                               </#if>
+                                            <#if apply?? && apply.handleResult?? && apply.handleResult==1 && apply.applyType==STOCK_LOCK>
+
+                                                    <a data-toggle="modal" href="#convertModel" onclick="convertSave('${apply.id!}','${apply.remark!}')"
+                                                       class="btn btn-sm default yellow<#---stripe-->">申请出库 <i class="icon-external-link"></i></a>
+
+                                                    <a href="${request.contextPath}/apply/nullify.html?applyId=${apply.id!}" class="btn btn-sm default red delete_btn<#---stripe-->">作废处理 <i class="icon-ban-circle"></i></a>
+
+                                                    <a href="${request.contextPath}/apply/unlock.html?applyId=${apply.id!}" class="btn btn-sm default dark delete_btn<#---stripe-->">解除锁定 <i class="icon-tags"></i></a>
+
+                                            </#if>
+
+                                                <a href="${request.contextPath}/apply/details.html?applyId=${apply.id!}" class="btn btn-sm default blue<#---stripe-->"> 查看详情
+                                                    <i class="icon-share"></i>
+                                                </a>
+
+                                        </td>
+                                    </tr>
+                                </#list>
+                            </#if>
+                            </tbody>
+                        </table>
+                    </div>
+                <@page result=applies></@page>
+            </div>
+            <!-- END PAGE -->
+    </div>
+    <!-- END CONTAINER -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+        <#include "/scripts.ftl">
+<#include "/foot.ftl">
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
+            <script>
+                jQuery(document).ready(function() {
+                    App.init(); // initlayout and core plugins
+                    $('.date-picker').datepicker({
+                        rtl: App.isRTL(),
+                        autoclose: true
+                    });
+                    $("td>a").css("margin-top","3px");
+                });
+                function convertSave(applyId, remark){
+                    $("input[name='applyId']").val(applyId);
+                    $("input[name='remark']").attr("placeholder",remark);
+                }
+            </script>
+            <!-- END JAVASCRIPTS -->
+<div class="modal fade" id="convertModel" tabindex="-1" role="convertModel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="${request.contextPath}/apply/convert.html" method="post">
+            <div class="modal-content">
+            <div class="modal-header">
+                <input type="hidden" name="applyId" value="" />
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">申请出库</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">申请类型</label>
+                        <select name="convertType" class="form-control select2me" data-placeholder="Select...">
+                            <option value="">选择..</option>
+                            <option value="1">生产出库</option>
+                            <option value="2">调拨出库</option>
+                            <option value="3">返修出库</option>
+                            <option value="4">换机出库</option>
+                            <option value="5">借用出库</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="control-label">申请备注</label>
+                        <input name="remark" value="" type="text" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn blue">提交</button>
+            </div>
+        </div>
+            <!-- /.modal-content -->
+        </form>
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+</body>
+<!-- END BODY -->
+</html>

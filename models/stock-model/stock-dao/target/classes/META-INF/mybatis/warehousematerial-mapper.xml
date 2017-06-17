@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.WarehouseMaterialMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.WarehouseMaterial" id="warehouseMaterialResultType">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="warehouseId" column="WAREHOUSE_ID" javaType="java.lang.Long"/>
+        <result property="materialId" column="MATERIAL_ID" javaType="java.lang.Long"/>
+        <result property="inventoryCount" column="INVENTORY_COUNT" javaType="java.lang.Long"/>
+        <result property="remark" column="REMARK" javaType="java.lang.String"/>
+    </resultMap>
+
+    <insert id="insertOne">
+        INSERT INTO T_WAREHOUSE_MATERIAL (ID,WAREHOUSE_ID,MATERIAL_ID,INVENTORY_COUNT,REMARK)
+        VALUES (#{id},#{warehouseId},#{materielId},0,#{remark})
+    </insert>
+
+	<select id="findWarehouseMaterialByWarehouseId"  resultMap="warehouseMaterialResultType">
+		SELECT * FROM T_WAREHOUSE_MATERIAL
+        <where>
+            <if test="warehouseId!= null and warehouseId!=''">
+                WAREHOUSE_ID = #{warehouseId,jdbcType=VARCHAR}
+            </if>
+        </where>
+	</select>
+
+	<select id="findById" resultMap="warehouseMaterialResultType">
+		SELECT * FROM T_WAREHOUSE_MATERIAL WHERE ID=#{warehouseMaterialId}
+	</select>
+
+    <select id="findWarehouseMaterialByWarehouseIdList"  resultMap="warehouseMaterialResultType">
+        SELECT * FROM T_WAREHOUSE_MATERIAL WHERE WAREHOUSE_ID IN
+        <if test="warehouseMaterialIdList.size() == 0">
+            ('')
+        </if>
+        <if test="warehouseMaterialIdList.size() > 0 and warehouseMaterialIdList != null">
+            <foreach collection="warehouseMaterialIdList" item="item" open="(" separator="," close=")">
+                ${item.id}
+            </foreach>
+        </if>
+    </select>
+
+	<select id="findByWarehouseIdAndMaterialId" resultMap="warehouseMaterialResultType">
+		SELECT * FROM T_WAREHOUSE_MATERIAL
+        <where>
+       		 1=1 
+            <if test="warehouseId!= null and warehouseId!=''">
+               AND WAREHOUSE_ID = #{warehouseId,jdbcType=VARCHAR}
+            </if>
+             <if test="materialId!= null and materialId!=''">
+                AND MATERIAL_ID = #{materialId,jdbcType=VARCHAR}
+            </if>
+        </where>
+	</select>
+
+	<select id="findByWarehouseIdAndIdList" resultMap="warehouseMaterialResultType">
+		SELECT * FROM T_WAREHOUSE_MATERIAL
+        <where>
+       		 1=1 
+            <if test="warehouseId!= null and warehouseId!=''">
+               AND WAREHOUSE_ID = #{warehouseId,jdbcType=VARCHAR}
+            </if>
+            AND MATERIAL_ID IN 
+            <foreach collection="materielList" item="materielId" open="(" close=")" separator=",">
+	             #{materielId}
+	    	</foreach>
+        </where>
+	</select>
+
+    <select id="findAllMaterial" resultType="java.util.Map">
+        SELECT T_WAREHOUSE_MATERIAL.MATERIAL_ID AS materialID,
+        T_MATERIEL.NAME AS NAME,
+        T_MATERIEL.TYPE AS TYPE,
+        SUM(T_WAREHOUSE_MATERIAL.INVENTORY_COUNT) AS NUM
+        FROM T_WAREHOUSE_MATERIAL
+        LEFT JOIN  T_MATERIEL  ON T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+        GROUP BY T_WAREHOUSE_MATERIAL.MATERIAL_ID,T_MATERIEL.NAME,T_MATERIEL.TYPE
+
+    </select>
+
+    <select id="findAllMaterialByWarehouseKeeper" resultType="java.util.Map" parameterType="com.zjht.inventory.stock.entity.WarehouseInfo">
+        SELECT T_WAREHOUSE_MATERIAL.MATERIAL_ID AS materialID,
+        T_MATERIEL.NAME AS NAME,
+        T_MATERIEL.TYPE AS TYPE,
+        SUM(T_WAREHOUSE_MATERIAL.INVENTORY_COUNT) AS NUM
+        FROM T_WAREHOUSE_MATERIAL
+        LEFT JOIN  T_MATERIEL  ON T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+        WHERE T_WAREHOUSE_MATERIAL.WAREHOUSE_ID IN
+        (
+        <if test="warehouseInfoList.size() == 0">
+            ''
+        </if>
+        <if test="warehouseInfoList!= null and warehouseInfoList.size() > 0">
+            <foreach collection="warehouseInfoList" item="item"  index="index" separator=",">
+                #{item.id}
+            </foreach>
+        </if>
+        )
+        GROUP BY T_WAREHOUSE_MATERIAL.MATERIAL_ID,T_MATERIEL.NAME,T_MATERIEL.TYPE
+
+    </select>
+
+    <select id="findSomeMaterialByWareshoueName" resultType="java.util.Map">
+        SELECT T_WAREHOUSE_MATERIAL.ID AS ID,
+        T_WAREHOUSE_MATERIAL.WAREHOUSE_ID AS warehouseID,
+        T_MATERIEL.ID AS materialID,
+        T_MATERIEL.NAME AS NAME,
+        T_MATERIEL.TYPE AS TYPE,
+        T_WAREHOUSE_MATERIAL.INVENTORY_COUNT AS NUM
+        FROM T_WAREHOUSE_MATERIAL  LEFT JOIN  T_MATERIEL  ON T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+        <if test="warehouseName!= null and warehouseName!=''">
+             WHERE T_WAREHOUSE_MATERIAL.WAREHOUSE_ID =
+            ( SELECT ID FROM T_WAREHOUSE_INFO WHERE
+             NAME = #{warehouseName} )
+        </if>
+        <if test="warehouseName == null or warehouseName == ''">
+            WHERE T_WAREHOUSE_MATERIAL.WAREHOUSE_ID = ''
+        </if>
+    </select>
+
+    <select id="countByMaterialIdAndWarehouseId" resultType="java.util.LinkedHashMap">
+        SELECT
+        <foreach collection="metadatas" item="item" separator="," close=",">
+            ${item.code}
+        </foreach>
+        COUNT(ID)
+        FROM ${tableName}
+        GROUP BY
+        <foreach collection="metadatas" item="item" separator="," close="">
+            ${item.code}
+        </foreach>
+    </select>
+
+    <select id="countByMaterialBySomeWarehouseKeeper" resultType="java.util.LinkedHashMap">
+        SELECT
+        <if test="metadatas != null and metadatas.size() > 0">
+            <foreach collection="metadatas" item="item" separator="," close=",">
+                ${item.code}
+            </foreach>
+        </if>
+        COUNT(ID)
+        FROM ${tableName} WHERE  ${tableName}.INVENTORY_DETAILED_ID IN
+        (
+        <if test="inventoryDetailedId == null or inventoryDetailedId.size() == 0">
+            ''
+        </if>
+        <if test="inventoryDetailedId != null and inventoryDetailedId.size() > 0">
+            <foreach collection="inventoryDetailedId"  item="item" separator="," close="">
+                #{item}
+            </foreach>
+        </if>
+        )
+        <if test="metadatas != null and metadatas.size() > 0">
+            GROUP BY
+        <foreach collection="metadatas" item="item" separator="," close="">
+            ${item.code}
+        </foreach>
+        </if>
+    </select>
+    
+    <select id="countForPropertiesForInterface" parameterType="java.util.LinkedHashMap" resultType="java.util.Map">
+        SELECT count(ID) AS COUNT FROM ${tableName}
+        <where>
+            1=1
+            <foreach collection="mapList.keys" item="key" open="" close="" separator="">
+                AND ${key}=#{mapList[${key}]}
+            </foreach>
+            AND INVENTORY_DETAILED_ID IN
+            <if test="inventoryDetailedId == null or inventoryDetailedId.size() == 0">
+                ('')
+            </if>
+            <if test="inventoryDetailedId != null or inventoryDetailedId.size() > 0">
+                <foreach collection="inventoryDetailedId" item="e" open="(" separator="," close=")">
+                    ${e.id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateCount">
+        UPDATE T_WAREHOUSE_MATERIAL
+        <set>
+            INVENTORY_COUNT=#{countNum}
+        </set>
+        <where>
+            ID=#{warehouseMaterialId}
+        </where>
+    </update>
+
+    <select id="getColumnNameForInterface" resultType="java.util.LinkedHashMap">
+        SELECT COLUMN_NAME  FROM all_tab_cols
+        <where>
+            <if test="tableName != null and tableName != ''">
+                TABLE_NAME = #{tableName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

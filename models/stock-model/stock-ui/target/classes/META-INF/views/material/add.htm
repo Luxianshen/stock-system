@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+<#include "/head.ftl">
+</head>
+<#include "/scripts.ftl">
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/metronic/plugins/select2/select2_metro.css" />
+<link rel="stylesheet" href="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.css" />
+<link rel="stylesheet" href="${request.contextPath}/metronic/plugins/fuelux/css/tree-metronic.css" />
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.js"></script>
+<script src="${request.contextPath}/metronic/scripts/table-advanced.js"></script>
+<script src="${request.contextPath}/metronic/plugins/fuelux/js/tree.min.js"></script>
+<style media="screen" type="text/css">
+    .material-item{margin-bottom: 10px;}
+</style>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<#include "/page_head.ftl">
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <div class="page-content">
+    <ul class="page-breadcrumb breadcrumb">
+
+    <li class="btn-group" id="materialtype" style="visibility: hidden">
+            <a href="#" class="btn blue" id="tree0" onclick="createData(id)"><span>新增属性</span></a>
+        </li>
+
+    <li>
+            <i class="icon-home"></i>
+            <a href="${request.contextPath}/home.html">Dashboard</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">物料管理</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li>
+            <a href="#">物料列表</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li><a href="#">新增物料</a></li>
+    </ul>
+    <!-- BEGIN PAGE -->
+        <#-- //TODO inert main content into here  -->
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="${request.contextPath}/material/add.html" method="post" class="form-horizontal"
+                         name="addTable" id="materialAddTable" onsubmit="SaveTable()">
+                            <h3 class="form-section">物料定义</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">物料名</label>
+                                        <div class="col-md-9">
+                                            <input type="text" id="name" class="form-control" name="name" placeholder="请输入中文名称" maxlength="20">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">物料代码</label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" id="code" name="code" placeholder="请根据规定格式填写"
+                                                   onchange="checkInput(id,value)" maxlength="16">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">物料类型</label>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="type" id="materialType" onclick="MaterialType()">
+                                                <option value="">请选择物料类型</option>
+                                                <option value="2">按件</option>
+                                                <option value="1">按量</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">物料分类</label>
+                                        <div id="materialCategory" class="col-md-9">
+                                            <a class="form-control" data-toggle="modal" href="#material-modal">选择物料分类</a>
+                                        <#--<select class="form-control" id="materielCategoryId" name="materielCategoryId">
+                                             <option value="">请选择物料分类</option>
+                                         </select>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none;">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">物料属性数据</label>
+                                        <div class="col-md-9">
+                                            <input type="text" id="jsondata" class="form-control" name="json">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <h3 class="form-section">物料属性 </h3>
+                            </div>
+
+                        <div id="material-property" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" onclick="Close()" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4 class="modal-title">创建属性</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">属性名 </label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" placeholder="请填写属性名" id="name1" name="name1" type="text" maxlength="20">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">属性代码</label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" placeholder="请填写代码" id="code1" name="code1" type="text" maxlength="16" onchange='checkInput(id,value)'>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">数据类型</label>
+                                                <div class="col-md-8">
+                                                    <select id="datatype" name="datatype" class="form-control" ><option>VARCHAR2</option><option>NUMBER</option><option>DATE</option></select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">数据长度</label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" placeholder="请填写数字" id="length" name="length" type="number">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">选择字典</label>
+                                                <div class="col-md-8">
+                                                    <select id="dictionaryId" class="form-control">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"> 备注 </label>
+                                                <div class="col-md-8">
+                                                    <input class="form-control" placeholder="请填写备注" id="remark" name="remark" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">是否唯一</label>
+                                                <div class="col-md-8">
+                                                    <div class="space-6"></div>
+                                                    <input id="uniqued" type="checkbox"   class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">是否统计</label>
+                                                <div class="col-md-8">
+                                                    <div class="space-6"></div>
+                                                    <input id="statistics" type="checkbox"   class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">是否必填</label>
+                                                <div class="col-md-8">
+                                                    <div class="space-6"></div>
+                                                    <input id="require" type="checkbox"  class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <button type="button" data-dismiss="modal" onclick="Close()" class="btn">关闭</button>
+
+
+    <button type="button" name="next" class="btn blue" onclick="SaveData(name)" >下一个</button>
+
+                                        <button type="button" class="btn yellow" onclick="SaveData(name)">确定</button>
+
+    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                            <div class="portlet" id="materialPos">
+                                <div class="table-responsive">
+                                    <table id="TB" class="table table-striped table-bordered table-advance table-hover" style="visibility: hidden">
+                                        <thead>
+                                        <tr>
+                                            <th width="11%">属性名</th>
+                                            <th width="11%">属性代码</th>
+                                            <th width="11%">数据类型</th>
+                                            <th width="11%">数据长度</th>
+                                            <th width="11%">字典代码</th>
+                                            <th width="11%">备注</th>
+                                            <th>是否唯一</th>
+                                            <th>是否统计</th>
+                                            <th>是否必要</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <center>
+
+    <input type="submit"  class="btn default" />
+
+    <a href="${request.contextPath}/material/list.html" class="btn default">返回</a>
+</center>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+
+    <div id="material-modal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h4 class="modal-title">选择分类</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="MyTree2" class="tree tree-plus-minus" style="max-height: 400px;overflow: scroll;">
+                                <div class = "tree-folder" style="display:none;">
+                                    <div class="tree-folder-header">
+                                        <i class="icon-folder-close"></i>
+                                        <div class="tree-folder-name"></div>
+                                    </div>
+                                    <div class="tree-folder-content"></div>
+                                    <div class="tree-loader" style="display:none"></div>
+                                </div>
+                                <div class="tree-item" style="display:none;">
+                                    <i class="tree-dot"></i>
+                                    <div class="tree-item-name"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="modal-footer" class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <#include "/foot.ftl">
+       <script src="${request.contextPath}/js/material/add-material-1.0.js" type="text/javascript"></script>
+       <script src="${request.contextPath}/js/apply/tree-build.js" type="text/javascript"></script>
+       <script src="${request.contextPath}/js/plan/tree-select.js" type="text/javascript"></script>
+       <script src="${request.contextPath}/js/material/add-getCategory.js" type="text/javascript"></script>
+<script>
+    jQuery(document).ready(function() {
+        App.init(); // initlayout and core plugins
+    });
+</script>
+    <script>
+        $("#datatype").change(function(){
+            var value = $("#datatype :selected").text();
+            if (value == "VARCHAR2") {
+                $("#dictionaryId").removeAttr("disabled");
+            }else {
+                $("#dictionaryId option:first").prop("selected", 'selected');
+                $("#dictionaryId").attr("disabled","disabled");
+            }
+        });
+    </script>
+
+<script type="text/javascript"
+        src="${request.contextPath}/js/repertory/jquery.validate.min.js"></script>
+<script type="text/javascript"
+        src="${request.contextPath}/js/repertory/additional-methods.min.js"></script>
+<script type="application/javascript">
+    //特殊字符验证
+    jQuery.validator.addMethod("specialCharValidate", function(value, element) {
+        var pattern = new RegExp("[`~!@%#$^&*()=|{}':;',　\\[\\]<>/? \\.；：%……+￥（）【】‘”“'。，、？\\-\\_]");
+       var id = element.id;
+        if (!pattern.test(value)) {
+            return true;
+        } else {
+            $("#" + id + "").val("");
+            return false;
+        }
+       /* return this.optional(element)||!pattern.test(value) ;*/
+    }, "请不要输入特殊字符！");
+
+    jQuery.validator.addMethod("checkdataType", function(value,element) {
+
+            var bb=element.id.replace("length", "datatype");
+            var cc=element.id;
+            var aa=$("#"+bb+" option:selected").text();
+            var pattern = new RegExp("^[0-9]*[1-9][0-9]*$");
+            if (pattern.test(value)){
+                if (aa == "NUMBER") {
+                    var  balance = 21;
+                    if (value>0&&value<balance) {
+                        return true;
+                    } else {
+                        $("#" + cc + "").val("");
+                        return false;
+                    }
+                    /*return this.optional(element) || ;*/
+                }else if(aa == "DATE"){
+                    var  balance = 7;
+                    if (value==balance) {
+                        return true;
+                    } else {
+                        $("#" + cc + "").val("");
+                        return false;
+                    }
+                    /*return this.optional(element) || value==balance;*/
+                }
+                else{
+                    if (value>0&&value<255) {
+                        return true;
+                    } else {
+                        $("#" + cc + "").val("");
+                        return false;
+                    }
+                    /* return true;*/
+                }
+            }else {
+                $("#" + cc + "").val("");
+                return false;
+            }
+
+    });
+    jQuery.validator.addMethod("checkAddCODE", function(value,element) {
+
+        var flag = 1;
+        var aa = element.id;
+        $.ajax({
+            type:"POST",
+            url:'/material/findMaterielCode.html',
+            async:false,                                             //同步方法，如果用异步的话，flag永远为1
+            data:{'code':value},
+            success: function(msg){
+                if(msg == '0'){
+                    flag = 0;
+                }
+            }
+        });
+
+        if(flag == 0){
+            $("#code").val("");
+            return false;
+        }else{
+            return true;
+        }
+
+    }, "sorry number have been exist");
+
+    var form1 = $('#materialAddTable');
+    var error1 = $('.alert-danger', form1);
+    var success1 = $('.alert-success', form1);
+
+    form1.validate({
+        errorElement: 'span',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        onkeyup:true,
+        ignore: "",
+        rules: {
+            code:{required:true,rangelength:[1,16],checkAddCODE:true,specialCharValidate:true},
+            name:{required:true,rangelength:[1,20],specialCharValidate:true},
+            type:{required:true},
+            materielCategoryId:{required:true},
+            length:{required: true, number: true ,checkdataType: true},
+            code1:{rangelength:[1,16],specialCharValidate:true},
+            name1:{rangelength:[1,20],specialCharValidate:true},
+            remark:{rangelength:[1,50],specialCharValidate:true}
+        },
+
+        messages:{
+            code:{
+                required:"物料代码必须填写",
+                rangelength:"长度小于16个字符",
+                checkAddCODE:"已经存在此CODE"
+            },
+            name:{
+                required:"物料名必须填写",
+                rangelength:"长度小于20个字符",
+                minlength:"最小长度为2个文字"
+            },
+            type:{
+                required:"物料类型必选",
+            },
+            materielCategoryId:{
+                required:"物料分类必须选择",
+            },
+            length:{
+                required: "此项需要填写大于0的整数",
+                number:"请输入数字",
+                checkdataType: "输入数字不对，NUMBER需要小于20，DATE固定为7。"
+            },
+            code1:{
+                rangelength:"长度小于16个字符"
+            },
+            name1:{
+                rangelength:"长度小于20个字符"
+            },
+            remark:{
+                rangelength:"输入值处于0-50"
+            }
+
+        },
+        invalidHandler: function (event, validator) { //display error alert on form submit
+            success1.hide();
+            error1.show();
+            App.scrollTo(error1, -200);
+        },
+
+        highlight: function (element) { // hightlight error inputs
+            $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+        },
+
+        unhighlight: function (element) { // revert the change done by hightlight
+            $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+        },
+
+        success: function (label) {
+            label
+                    .closest('.form-group').removeClass('has-error'); // set success class to the control group
+        },
+
+        submitHandler: function (form) {
+        }
+
+    });
+
+</script>
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

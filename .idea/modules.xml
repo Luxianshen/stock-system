@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/commons/commons-component/commons-component.iml" filepath="$PROJECT_DIR$/commons/commons-component/commons-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/commons/commons-database/commons-database.iml" filepath="$PROJECT_DIR$/commons/commons-database/commons-database.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/extensions-model/extensions-interface/extensions-interface.iml" filepath="$PROJECT_DIR$/models/extensions-model/extensions-interface/extensions-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/extensions-model/extensions-model.iml" filepath="$PROJECT_DIR$/models/extensions-model/extensions-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/extensions-model/extensions-interface/interface-ui/interface-ui.iml" filepath="$PROJECT_DIR$/models/extensions-model/extensions-interface/interface-ui/interface-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inventory.iml" filepath="$PROJECT_DIR$/inventory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/models.iml" filepath="$PROJECT_DIR$/models/models.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/stock-model/stock-api/stock-api.iml" filepath="$PROJECT_DIR$/models/stock-model/stock-api/stock-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/stock-model/stock-dao/stock-dao.iml" filepath="$PROJECT_DIR$/models/stock-model/stock-dao/stock-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/stock-model/stock-model.iml" filepath="$PROJECT_DIR$/models/stock-model/stock-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/stock-model/stock-service/stock-service.iml" filepath="$PROJECT_DIR$/models/stock-model/stock-service/stock-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/stock-model/stock-ui/stock-ui.iml" filepath="$PROJECT_DIR$/models/stock-model/stock-ui/stock-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/test-model/test-api/test-api.iml" filepath="$PROJECT_DIR$/models/test-model/test-api/test-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/test-model/test-dao/test-dao.iml" filepath="$PROJECT_DIR$/models/test-model/test-dao/test-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/test-model/test-model.iml" filepath="$PROJECT_DIR$/models/test-model/test-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/test-model/test-service/test-service.iml" filepath="$PROJECT_DIR$/models/test-model/test-service/test-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/models/test-model/test-ui/test-ui.iml" filepath="$PROJECT_DIR$/models/test-model/test-ui/test-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web/web.iml" filepath="$PROJECT_DIR$/web/web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web/web-commons/web-commons.iml" filepath="$PROJECT_DIR$/web/web-commons/web-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web/webapp/webapp.iml" filepath="$PROJECT_DIR$/web/webapp/webapp.iml" />
+    </modules>
+  </component>
+</project>

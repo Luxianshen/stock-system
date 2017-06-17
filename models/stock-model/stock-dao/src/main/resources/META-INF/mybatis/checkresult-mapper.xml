@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.CheckResultMapper">
+ 	<resultMap type="com.zjht.inventory.stock.entity.CheckResult" id="checkResultResultMap">
+		<id property="id" column="ID" javaType="java.lang.Long"/>
+		<result property="planId" column="PLAN_ID" javaType="java.lang.String"/>
+		<result property="actualCheckNum" column="ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="checkBy" column="CHECK_BY" javaType="java.lang.String"/>
+		<result property="checkTime" column="CHECK_TIME" javaType="java.util.Date" />
+		<result property="checkResult" column="CHECK_RESULT" javaType="java.lang.Long"/>
+		<result property="checkRemark" column="CHECK_REMARK" javaType="java.lang.String"/>
+		<result property="checkStatus" column="CHECK_STATUS" javaType="java.lang.Long"/>
+	</resultMap> 
+	
+	<select id="findCheckResultByPlanId" resultMap="checkResultResultMap">
+		SELECT * FROM T_CHECK_RESULT WHERE PLAN_ID = #{planId}
+	</select>
+
+
+</mapper>

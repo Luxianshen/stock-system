@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+<title>Web控制台</title> 
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<#include "/scripts.ftl">
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+	<#include "/page_head.ftl">
+
+	<div class="clearfix"></div>
+
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container">
+		<#include "/page_sidebar.ftl">
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<#-- //TODO inert main content into here -->
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+					<!--<h3 class="page-title">    大标题 <small>标题描述</small></h3>-->
+					<ul class="page-breadcrumb breadcrumb">
+						<li class="btn-group">
+							<a href="${request.contextPath}/plan/list.html" class="btn blue"><span>返回</span></a>
+						</li>
+						<li><i class="icon-home"></i> 
+							<a href="index.html">主页</a>
+							<i class="icon-angle-right"></i>
+						</li>
+						<li><a href="#">盘点管理</a> <i class="icon-angle-right"></i></li>
+						<li><a href="#">修改盘点计划</a></li>
+					</ul>
+					<!-- END PAGE TITLE & BREADCRUMB-->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<form id="updateForm" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+						<input type="hidden" name="id" id="id" value="${id!}"/>
+					 	<input type="hidden" name="materialID" id="materialID" value="${checkMaterial!}"/>
+					 	<input type="hidden" name="warehouseId" id="warehouseId" value="${warehouseId!}"/>
+						<div class="form-body">
+							<div class="form-group">
+								<label class="control-label col-md-3">计划名称：</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" readonly="readonly" 
+										name="planName" id="planName" value="${planName!}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">盘点仓库：</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" readonly="readonly" 
+										name="checkWarehouse" id="checkWarehouse" value="${checkWarehouse!}"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3"><span class="required">*</span>盘点比例：</label>
+								<div class="col-md-4">
+									<input type="text" placeholder="盘点比例（0~100）" class="form-control" 
+										name="checkProportion" id="checkProportion" value="${checkProportion!}"/>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label"><span class="required">*</span>盘点物料：</label>
+								<div class="col-md-4">
+									<select class="form-control" name="checkMaterial" id="checkMaterial">
+										<option value="">请选择物料</option> 
+									    <option value="all">全盘</option> 
+										<#if materials??> 
+										    <#list materials as material>
+										   		 <option value="${material.ID!}">${material.NAME!}</option>
+											</#list> 
+										</#if>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn blue" id="a_submit_now">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+	
+	<#include "/foot.ftl"> 
+	<script>
+	    jQuery(document).ready(function() {
+	        App.init();
+	        
+	        $("#checkMaterial").val($("#materialID").val());
+	    	
+	    	$("#a_submit_now").click(function(){
+	    		var _id = $.trim($("#id").val());
+	    		
+	            var _checkProportion = $.trim($("#checkProportion").val());
+	    		if (_checkProportion.length == 0 || _checkProportion == "盘点比例（0~100）") {
+	    			alert("请输入盘点比例！");
+	    			return false;
+	    		}
+	    		var reg = /^(?:0|[1-9][0-9]?|100)$/;// 判断0~100的整数
+	    		if (!reg.test(_checkProportion)) {
+	    			alert("盘点比例的值为0~100的整数！");
+	    			return false;
+	    		}
+	    		var _checkMaterial = $("#checkMaterial").val();
+	    		if (_checkMaterial == "" ) {
+	    			alert("请选择盘点物料！");
+	    			return false;
+	    		}
+	    		
+	    		$.ajax({
+	    			type : "POST",
+	    			url : "/plan/updateCheckplan.html",
+	    			dataType : "json",
+	    			data : {
+	    				id:_id,
+	    				checkProportion:_checkProportion,
+	    				checkMaterial:_checkMaterial
+	    			},
+	     			success : function(ajaxResult) {
+	     				if(ajaxResult.status=="1"){
+	     					confirm('提示','盘点计划修改成功，返回盘点计划列表？',function(status){
+     							if(status){
+     								window.location.href=ajaxResult.toUrl;
+     							}else{
+     								window.location.href = "/plan/toUpdate.html?id="+_id;
+     							}
+	     					});
+	     				}
+	     				else{
+	     					alert(ajaxResult.msg);
+	     				}
+	     			},
+	     			error : function() {
+	     				alert("保存错误，请稍后再试！");
+	     			}
+	     		});
+	    		    
+	    		return false ; 
+	    		
+	    	});
+	    });
+    </script> 
+     
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

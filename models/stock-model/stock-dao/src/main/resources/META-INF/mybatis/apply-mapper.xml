@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.ApplyMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Apply" id="applyMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <id property="serialNumber" column="SERIAL_NUMBER" javaType="java.lang.String"/>
+        <result property="orderId" column="ORDER_ID" javaType="java.lang.String" />
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" />
+        <result property="createBy" column="CREATE_BY" javaType="java.lang.String" />
+        <result property="warehouseBelong" column="WAREHOUSE_BELONG" javaType="java.lang.Long" />
+        <result property="warehouseName" column="WAREHOUSE_NAME" javaType="java.lang.String" />
+        <result property="applyType" column="APPLY_TYPE" javaType="java.lang.Long" />
+        <result property="remark" column="REMARK" javaType="java.lang.String" />
+        <result property="status" column="STATUS" javaType="java.lang.Long" />
+        <result property="handleBy" column="HANDLE_BY" javaType="java.lang.String" />
+        <result property="handleResult" column="HANDLE_RESULT" javaType="java.lang.Long" />
+        <result property="handleRemark" column="HANDLE_REMARK" javaType="java.lang.String" />
+        <association property="applyLists" column="ID" select="findApplyListAllById"/>
+    </resultMap>
+
+    <resultMap type="com.zjht.inventory.stock.entity.ApplyList" id="applyListMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="materielTypeId" column="MATERIEL_TYPE_ID" javaType="java.lang.Long" />
+        <result property="materielTypeName" column="MATERIEL_TYPE_NAME" javaType="java.lang.String" />
+        <result property="materielId" column="MATERIEL_ID" javaType="java.lang.Long" />
+        <result property="materielName" column="MATERIEL_NAME" javaType="java.lang.String" />
+        <result property="applyId" column="APPLY_ID" javaType="java.lang.Long" />
+        <result property="count" column="COUNT" javaType="java.lang.Long" />
+        <association property="applyListProperties" column="ID" select="findApplyListPropertyAllById"/>
+    </resultMap>
+
+    <resultMap type="com.zjht.inventory.stock.entity.ApplyListProperty" id="applyListPropertyMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="listId" column="LIST_ID" javaType="java.lang.Long" />
+        <result property="property" column="PROPERTY" javaType="java.lang.String" />
+        <result property="propertyName" column="PROPERTY_NAME" javaType="java.lang.String" />
+        <result property="value" column="VALUE" javaType="java.lang.String" />
+    </resultMap>
+
+    <insert id="saveApply" parameterType="com.zjht.inventory.stock.entity.Apply">
+        INSERT INTO T_APPLY(
+                ID,
+                SERIAL_NUMBER,
+                ORDER_ID,
+                CREATE_TIME,
+                CREATE_BY,
+                WAREHOUSE_BELONG,
+                APPLY_TYPE,
+                REMARK,
+                STATUS,
+                HANDLE_BY,
+                HANDLE_RESULT,
+                HANDLE_REMARK)
+        VALUES (#{apply.id},#{apply.serialNumber},#{apply.orderId},#{apply.createTime},
+        #{apply.createBy},#{apply.warehouseBelong},
+        #{apply.applyType},#{apply.remark},#{apply.status},
+        #{apply.handleBy},#{apply.handleResult},#{apply.handleRemark})
+    </insert>
+    <insert id="saveApplyLists" parameterType="com.zjht.inventory.stock.entity.ApplyList">
+        INSERT INTO T_APPLY_LIST(
+                ID,
+                MATERIEL_TYPE_ID,
+                MATERIEL_ID,
+                APPLY_ID,
+                "COUNT")
+        VALUES
+            <foreach collection="applyLists" item="item" index="index" separator="," >
+                (#{item.id},#{item.materielTypeId},#{item.materielId},
+                #{item.applyId}, #{item.count})
+            </foreach>
+    </insert>
+    <insert id="saveApplyList" parameterType="com.zjht.inventory.stock.entity.ApplyList">
+        INSERT INTO T_APPLY_LIST(
+                ID,
+                MATERIEL_TYPE_ID,
+                MATERIEL_ID,
+                APPLY_ID,
+                "COUNT")
+        VALUES
+                (#{applyList.id},#{applyList.materielTypeId},#{applyList.materielId},
+                #{applyList.applyId}, #{applyList.count})
+    </insert>
+    <insert id="saveApplyListProperties" parameterType="com.zjht.inventory.stock.entity.ApplyListProperty">
+        INSERT INTO T_APPLY_LIST_PROPERTY(
+                ID,
+                LIST_ID,
+                PROPERTY,
+                "VALUE")
+        VALUES
+            <foreach collection="applyListProperties" item="item" index="index" separator="," >
+                (#{item.id},#{item.listId},
+                #{item.property},#{item.value})
+            </foreach>
+    </insert>
+    <insert id="saveApplyListProperty" parameterType="com.zjht.inventory.stock.entity.ApplyListProperty">
+        INSERT INTO T_APPLY_LIST_PROPERTY(
+                ID,
+                LIST_ID,
+                PROPERTY,
+                "VALUE")
+        VALUES
+                (#{applyListProperty.id},#{applyListProperty.listId},
+                #{applyListProperty.property},#{applyListProperty.value})
+    </insert>
+
+
+    <update id="changeHandleResultById">
+        update T_APPLY
+        <set>
+            HANDLE_RESULT=#{result}
+            <if test="handleBy!=null and handleBy!=''">
+                ,HANDLE_BY=#{handleBy}
+            </if>
+            <if test="handleRemark!=null and handleRemark!=''">
+                ,HANDLE_REMARK=#{handleRemark}
+            </if>
+        </set>
+        where ID=#{applyId}
+    </update>
+
+    <update id="changeStatus">
+        update T_APPLY
+          SET
+            HANDLE_RESULT=2
+
+        where ID=#{id}
+    </update>
+
+    <select id="findById" resultMap="applyMap">
+        SELECT  a.ID,
+                a.SERIAL_NUMBER,
+                a.ORDER_ID,
+                a.CREATE_TIME,
+                a.CREATE_BY,
+                a.WAREHOUSE_BELONG,
+                (select NAME from T_WAREHOUSE_INFO wi where wi.ID=a.WAREHOUSE_BELONG) AS WAREHOUSE_NAME,
+                a.APPLY_TYPE,
+                a.REMARK,
+                a.STATUS,
+                a.HANDLE_BY,
+                a.HANDLE_RESULT,
+                a.HANDLE_REMARK
+        FROM T_APPLY a
+        <where>
+            1=1
+            <if test="id!=null">
+              and a.ID = #{id}
+            </if>
+            and rownum = 1
+        </where>
+    </select>
+
+    <select id="findBySerialNumber" resultMap="applyMap">
+        SELECT  a.ID,
+                a.ORDER_ID,
+                a.CREATE_TIME,
+                a.CREATE_BY,
+                a.WAREHOUSE_BELONG,
+                (select NAME from T_WAREHOUSE_INFO wi where wi.ID=a.WAREHOUSE_BELONG) AS WAREHOUSE_NAME,
+                a.APPLY_TYPE,
+                a.REMARK,
+                a.STATUS,
+                a.HANDLE_BY,
+                a.HANDLE_RESULT,
+                a.HANDLE_REMARK
+        FROM T_APPLY a
+        <where>
+            1=1
+            <if test="serialNumber!=null">
+              and a.SERIAL_NUMBER = #{serialNumber}
+            </if>
+            and rownum = 1
+        </where>
+    </select>
+
+
+
+    <!-- 申请单列表 -->
+    <select id="findAll" resultMap="applyMap">
+        <include refid="findList"/>
+        order by a.CREATE_TIME desc
+    </select>
+    <select id="findByPage" resultMap="applyMap">
+        <include refid="findList"/>
+        order by a.CREATE_TIME desc
+    </select>
+
+
+    <!-- 清单列表 -->
+    <select id="findApplyListByPage" resultMap="applyListMap">
+        <include refid="findApplyList"/>
+    </select>
+    <select id="findApplyListAll" resultMap="applyListMap">
+        <include refid="findApplyList"/>
+    </select>
+        <!--(select NAME from T_CATEGORY c where c.ID=a.MATERIEL_TYPE_ID) AS MATERIEL_TYPE_NAME,-->
+    <select id="findApplyListAllById" resultMap="applyListMap">
+        SELECT a.*,
+        (select NAME from T_CATEGORY c where (c.ID=(select MATERIEL_CATEGORY_ID from T_MATERIEL m where m.ID=a.MATERIEL_ID))) AS MATERIEL_TYPE_NAME,
+        (select NAME from T_MATERIEL m where m.ID=a.MATERIEL_ID) AS MATERIEL_NAME
+         FROM T_APPLY_LIST a where a.APPLY_ID = #{ID}
+    </select>
+    <select id="findApplyListByListId" resultMap="applyListMap">
+        SELECT a.*,
+        (select NAME from T_CATEGORY c where (c.ID=(select MATERIEL_CATEGORY_ID from T_MATERIEL m where m.ID=a.MATERIEL_ID))) AS MATERIEL_TYPE_NAME,
+        (select NAME from T_MATERIEL m where m.ID=a.MATERIEL_ID) AS MATERIEL_NAME
+         FROM T_APPLY_LIST a where a.ID = #{listId}
+    </select>
+
+    <!-- 属性列表 -->
+    <select id="findApplyListPropertyAll" resultMap="applyListMap">
+        SELECT a.*,
+        (select NAME from T_MATERIEL_METADATA mm where mm.MATERIEL_ID = (select MATERIEL_ID from T_APPLY_LIST where ID = a.LIST_ID)
+        and mm.CODE=a.PROPERTY ) as propertyName
+        FROM T_APPLY_LIST_PROPERTY a
+        <where>
+            1=1
+            <if test="listId!=null">
+                and a.LIST_ID = #{listId}
+            </if>
+        </where>
+    </select>
+    <select id="findApplyListPropertyAllById" resultMap="applyListPropertyMap">
+        SELECT a.*,
+        (select NAME from T_MATERIEL_METADATA mm where mm.MATERIEL_ID = (select MATERIEL_ID from T_APPLY_LIST where ID = a.LIST_ID)
+        and mm.CODE=a.PROPERTY ) as propertyName
+        FROM T_APPLY_LIST_PROPERTY a where a.LIST_ID = #{ID}
+    </select>
+    <update id="convertType">
+        UPDATE T_APPLY
+        <set>
+              APPLY_TYPE=#{convertType}
+            <if test="remark!=null and remark!=''">
+              ,REMARK=#{remark}
+            </if>
+        </set>
+        WHERE ID=#{applyId}
+    </update>
+    <!--
+        其他表需要用到时, 请阅读以下细则
+        1. 区间查询的表名须设置别名为a
+        2. 该表的查询时间字段应为CREATE_TIME
+    -->
+    <sql id="timeRange" >
+        <if test="startTime!=null and startTime!=''">
+            <if test="endTime!=null and endTime!=''">
+              and (a.CREATE_TIME between to_date(#{startTime},'yyyy-MM-dd') AND to_date(#{endTime},'yyyy-MM-dd'))
+            </if>
+            <if test="endTime==null or endTime==''">
+              and (a.CREATE_TIME >= to_date(#{startTime},'yyyy-MM-dd'))
+            </if>
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            <if test="startTime==null or startTime==''">
+              and (to_date(#{endTime},'yyyy-MM-dd') >= a.CREATE_TIME)
+            </if>
+        </if>
+    </sql>
+    
+
+    <sql id="findList">
+        SELECT  a.ID,
+        a.SERIAL_NUMBER,
+        a.ORDER_ID,
+        a.CREATE_TIME,
+        a.CREATE_BY,
+        a.WAREHOUSE_BELONG,
+        (select NAME from T_WAREHOUSE_INFO wi where wi.ID=a.WAREHOUSE_BELONG) AS WAREHOUSE_NAME,
+        a.APPLY_TYPE,
+        a.REMARK,
+        a.STATUS,
+        a.HANDLE_BY,
+        a.HANDLE_RESULT,
+        a.HANDLE_REMARK
+        FROM T_APPLY a
+        <where>
+            1 = 1
+            <if test="orderId!=null and orderId!=''">
+                and a.ORDER_ID=#{orderId}
+            </if>
+            <if test="warehouseBelong!=null and warehouseBelong!=''">
+                and a.WAREHOUSE_BELONG=#{warehouseBelong}
+            </if>
+            <if test="applyType!=null and applyType!=''">
+                and a.APPLY_TYPE = #{applyType}
+            </if>
+            <if test="status!=null and status!=''">
+                and a.STATUS = #{status}
+            </if>
+            <if test="handleResult!=null and handleResult!=''">
+                and a.HANDLE_RESULT = #{handleResult}
+            </if>
+            <include refid="timeRange"/>
+        </where>
+    </sql>
+
+
+    <sql id="findApplyList">
+        SELECT a.*,
+        (select NAME from T_CATEGORY c where (c.ID=(select MATERIEL_CATEGORY_ID from T_MATERIEL m where m.ID=a.MATERIEL_ID))) AS MATERIEL_TYPE_NAME,
+        (select NAME from T_MATERIEL m where m.ID=a.MATERIEL_ID) AS MATERIEL_NAME,
+        FROM T_APPLY_LIST a
+        <where>
+            1=1
+            <if test="applyId!=null">
+              and a.APPLY_ID = #{applyId}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

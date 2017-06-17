@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.DictionaryMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Dictionary" id="dicResultMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+
+    </resultMap>
+    <resultMap type="com.zjht.inventory.stock.entity.Dictionary" id="dicitemResultMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="optionName" column="OPTION_NAME" javaType="java.lang.String"/>
+        <result property="optionValue" column="OPTION_VALUE" javaType="java.lang.String"/>
+
+    </resultMap>
+
+    <select id="findDataByCode" resultMap="dicitemResultMap">
+        SELECT OPTION_NAME,OPTION_VALUE FROM T_DATA_DICTIONARY_ITEM WHERE CODE=#{code}
+    </select>
+
+    <select id="findDictionaryItemById" resultMap="dicitemResultMap">
+        SELECT * FROM T_DATA_DICTIONARY_ITEM WHERE ID=#{id}
+    </select>
+
+    <select id="findDictionItemByCode" resultMap="dicitemResultMap">
+        SELECT * FROM T_DATA_DICTIONARY_ITEM WHERE CODE=#{code} AND OPTION_NAME = #{optionName}
+    </select>
+
+    <select id="findDictionaryCode" resultMap="dicResultMap">
+        SELECT CODE,NAME FROM T_DATA_DICTIONARY
+    </select>
+    <select id="findAllDictionary" resultMap="dicResultMap">
+        SELECT * FROM T_DATA_DICTIONARY
+    </select>
+    <select id="findDictionaryByCode" resultMap="dicResultMap">
+        SELECT * FROM T_DATA_DICTIONARY WHERE CODE=#{code}
+    </select>
+    <select id="findAllDictionaryItem" resultMap="dicitemResultMap">
+        SELECT * FROM T_DATA_DICTIONARY_ITEM WHERE CODE=#{code}
+    </select>
+    <update id="updateDictionaryName"  parameterType="com.zjht.inventory.stock.entity.Dictionary">
+        UPDATE T_DATA_DICTIONARY SET
+        NAME =#{name}
+        WHERE ID=#{id}
+    </update>
+
+    <update id="updateDictionaryOldData" parameterType="com.zjht.inventory.stock.entity.Dictionary">
+        UPDATE T_DATA_DICTIONARY_ITEM
+        <trim prefix="set" suffixOverrides=",">
+            <if test="dictionary.code!=null">CODE=#{dictionary.code},</if>
+            <if test="dictionary.optionName!=''">OPTION_NAME=#{dictionary.optionName},</if>
+            <if test="dictionary.optionValue!=''">OPTION_VALUE=#{dictionary.optionValue},</if>
+        </trim>
+        WHERE ID=#{dictionary.id}
+    </update>
+
+    <insert id="addDictionaryNewData" parameterType="com.zjht.inventory.stock.entity.Dictionary">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT T_DATA_DICTIONARY_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_DATA_DICTIONARY (
+        ID,
+        CODE,
+        NAME
+        )
+        VALUES
+        (
+        #{id},
+        #{code},
+        #{name}
+        )
+    </insert>
+
+    <insert id="updateDictionaryNewData" parameterType="com.zjht.inventory.stock.entity.Dictionary">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT T_DATA_DICTIONARY_ITEM_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_DATA_DICTIONARY_ITEM (
+        ID,
+        CODE,
+        OPTION_NAME,
+        OPTION_VALUE
+       )
+        VALUES
+        (
+        #{id},
+        #{dictionary.code},
+        #{dictionary.optionName},
+        #{dictionary.optionValue}
+        )
+    </insert>
+
+
+</mapper>

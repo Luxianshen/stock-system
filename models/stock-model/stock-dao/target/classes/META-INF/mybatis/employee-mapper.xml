@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.EmployeeMapper">
+
+    <select id="getEmployeeList" resultType="com.zjht.inventory.stock.entity.Employee">
+        SELECT  ID, CODE, NAME FROM T_EMPLOYEE
+        WHERE COMPANY_CODE = #{companyCode} AND DEPARTMENT_CODE = #{departmentCode}
+    </select>
+    <select id="getEmployeeId" resultType="com.zjht.inventory.stock.entity.Employee">
+        SELECT ID, CODE FROM T_EMPLOYEE WHERE NAME = #{employeeName}
+    </select>
+</mapper>

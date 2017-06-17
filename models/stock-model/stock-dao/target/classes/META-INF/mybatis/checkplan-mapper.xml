@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.CheckPlanMapper">
+ 	<resultMap type="com.zjht.inventory.stock.entity.CheckPlan" id="checkplanResultMap">
+		<id property="id" column="ID" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATE_TIME" javaType="java.util.Date" />
+		<result property="planName" column="PLAN_NAME" javaType="java.lang.String"/>
+		<result property="checkWarehouse" column="CHECK_WAREHOUSE" javaType="java.lang.String"/>
+		<result property="checkProportion" column="CHECK_PROPORTION" javaType="java.lang.Long"/>
+		<result property="checkMaterial" column="CHECK_MATERIAL" javaType="java.lang.String"/>
+		<result property="shouldCheckNum" column="SHOULD_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="checkBy" column="CHECK_BY" javaType="java.lang.String"/>
+		<result property="checkTime" column="CHECK_TIME" javaType="java.util.Date" />
+		<result property="actualCheckNum" column="ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+	</resultMap> 
+	
+	<resultMap type="com.zjht.inventory.stock.entity.CheckPlanDto" id="checkplanDtoResultMap">
+		<id property="id" column="ID" javaType="java.lang.Long"/>
+		<result property="createTime" column="CREATE_TIME" javaType="java.util.Date" />
+		<result property="planName" column="PLAN_NAME" javaType="java.lang.String"/>
+		<result property="checkWarehouse" column="CHECK_WAREHOUSE" javaType="java.lang.String"/>
+		<result property="checkProportion" column="CHECK_PROPORTION" javaType="java.lang.Long"/>
+		<result property="checkMaterial" column="CHECK_MATERIAL" javaType="java.lang.String"/>
+		<result property="shouldCheckNum" column="SHOULD_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="checkBy" column="CHECK_BY" javaType="java.lang.String"/>
+		<result property="checkTime" column="CHECK_TIME" javaType="java.util.Date" />
+		<result property="actualCheckNum" column="ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="name" column="NAME" javaType="java.lang.String"/>
+	</resultMap> 
+	
+	<resultMap type="com.zjht.inventory.stock.entity.PlanRecordDto" id="planrecordDtoResultMap">
+		<id property="id" column="cPlan_ID" javaType="java.lang.Long"/>
+		<result property="planTime" column="cPlan_CREATE_TIME" javaType="java.util.Date" />
+		<result property="planName" column="cPlan_PLAN_NAME" javaType="java.lang.String"/>
+		<result property="checkWarehouse" column="cPlan_CHECK_WAREHOUSE" javaType="java.lang.String"/>
+		<result property="checkProportion" column="cPlan_CHECK_PROPORTION" javaType="java.lang.Long"/>
+		<result property="checkMaterial" column="cPlan_CHECK_MATERIAL" javaType="java.lang.String"/>
+		<result property="shouldCheckNum" column="cPlan_SHOULD_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="checkBy" column="cPlan_CHECK_BY" javaType="java.lang.String"/>
+		<result property="checkTime" column="cPlan_CHECK_TIME" javaType="java.util.Date" />
+		<result property="actualCheckNum" column="cPlan_ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="operate" column="cPlan_OPERATE" javaType="java.lang.String"/>
+		<result property="differNum" column="cPlan_DIFFER_NUM" javaType="java.lang.Long"/>
+		<association property="checkResult" javaType="com.zjht.inventory.stock.entity.CheckResult">
+			<id property="id" column="cResult_ID" javaType="java.lang.Long"/>
+			<result property="planId" column="cResult_PLAN_ID" javaType="java.lang.String"/>
+			<result property="actualCheckNum" column="cResult_ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+			<result property="checkBy" column="cResult_CHECK_BY" javaType="java.lang.String"/>
+			<result property="checkTime" column="cResult_CHECK_TIME" javaType="java.util.Date" />
+			<result property="checkResult" column="cResult_CHECK_RESULT" javaType="java.lang.Long"/>
+			<result property="checkRemark" column="cResult_CHECK_REMARK" javaType="java.lang.String"/>
+			<result property="checkStatus" column="cResult_CHECK_STATUS" javaType="java.lang.Long"/>
+		</association>
+	</resultMap> 
+	
+	<resultMap type="com.zjht.inventory.stock.entity.PlanDifferDto" id="plandifferDtoResultMap">
+		<id property="id" column="PLAN_ID" javaType="java.lang.Long"/>
+		<result property="planTime" column="PLAN_CREATE_TIME" javaType="java.util.Date" />
+		<result property="planName" column="PLAN_PLAN_NAME" javaType="java.lang.String"/>
+		<result property="checkWarehouse" column="PLAN_CHECK_WAREHOUSE" javaType="java.lang.String"/>
+		<result property="checkProportion" column="PLAN_CHECK_PROPORTION" javaType="java.lang.Long"/>
+		<result property="checkMaterial" column="PLAN_CHECK_MATERIAL" javaType="java.lang.String"/>
+		<result property="shouldCheckNum" column="PLAN_SHOULD_CHECK_NUM" javaType="java.lang.Long"/>
+		<result property="checkBy" column="PLAN_CHECK_BY" javaType="java.lang.String"/>
+		<result property="checkTime" column="PLAN_CHECK_TIME" javaType="java.util.Date" />
+		<result property="actualCheckNum" column="PLAN_ACTUAL_CHECK_NUM" javaType="java.lang.Long"/>
+		<collection  property="warehouseInventory" ofType="com.zjht.inventory.stock.entity.WarehouseInventory" javaType="List">
+			<id property="id" column="WAMA_ID" javaType="java.lang.Long"/>
+	        <result property="warehouseId" column="WAMA_WAREHOUSE_ID" javaType="java.lang.String"/>
+	        <result property="materialId" column="WAMA_MATERIAL_ID" javaType="java.lang.String"/>
+	        <result property="inventoryCount" column="WAMA_INVENTORY_COUNT" javaType="java.lang.Long"/>
+	        <result property="remark" column="WAMA_REMARK" javaType="java.lang.String"/>
+	        <result property="checkStatus" column="WAMA_CHECK_STATUS" javaType="java.lang.String"/>
+	        <association property="inventoryDetailed" javaType="com.zjht.inventory.stock.entity.InventoryDetailed" >
+				<id property="id" column="INVD_ID" javaType="java.lang.Long"/>
+	       	 	<result property="warehouseMaterialId" column="INVD_WAREHOUSE_MATERIAL_ID" javaType="java.lang.String"/>
+	        	<result property="assetsNo" column="INVD_ASSETS_NO" javaType="java.lang.String"/>
+	        	<result property="status" column="INVD_STATUS" javaType="java.lang.Long"/>
+			</association>
+			<association property="material" javaType="com.zjht.inventory.stock.entity.Materiel">
+				<id property="id" column="MATE_ID" javaType="java.lang.Long"/>
+		        <result property="code" column="MATE_CODE" javaType="java.lang.String"/>
+		        <result property="name" column="MATE_NAME" javaType="java.lang.String"/>
+		        <result property="materielCategoryId" column="MATE_MATERIEL_CATEGORY_ID" javaType="java.lang.String"/>
+		        <result property="type" column="MATE_TYPE" javaType="java.lang.Long"/>
+		        <result property="mappingPrivateTable" column="MATE_MAPPING_PRIVATE_TABLE" javaType="java.lang.String"/>
+		        <result property="createTime" column="MATE_CREATE_TIME" javaType="java.util.Date"/>
+			</association>
+			<association property="category" javaType="com.zjht.inventory.stock.entity.Category">
+				<id property="id" column="CATE_ID" javaType="java.lang.Long"/>
+	        	<result property="superiorId" column="CATE_SUPERIORID" javaType="java.lang.String"/>
+	        	<result property="code" column="CATE_CODE" javaType="java.lang.String"/>
+	        	<result property="name" column="CATE_NAME" javaType="java.lang.String"/>
+			</association>
+		</collection>
+	</resultMap> 
+	
+	<insert id="save" parameterType="com.zjht.inventory.stock.entity.CheckPlan">
+		INSERT INTO T_CHECK_PLAN(ID,CREATE_TIME ,PLAN_NAME ,
+		    CHECK_WAREHOUSE ,CHECK_PROPORTION ,CHECK_MATERIAL,SHOULD_CHECK_NUM
+		)VALUES
+		(#{checkPlan.id},
+		#{checkPlan.createTime},
+		#{checkPlan.planName},
+		#{checkPlan.checkWarehouse},
+		#{checkPlan.checkProportion},
+		#{checkPlan.checkMaterial},
+		#{checkPlan.shouldCheckNum})
+	</insert>
+	
+	<select id="findCheckPlanList" parameterType="com.zjht.inventory.stock.entity.CheckPlanDto" resultMap="checkplanDtoResultMap">
+		SELECT T_CHECK_PLAN.ID , T_CHECK_PLAN.PLAN_NAME,T_CHECK_PLAN.CREATE_TIME,T_CHECK_PLAN.CHECK_PROPORTION,
+		T_CHECK_PLAN.CHECK_WAREHOUSE,T_CHECK_PLAN.CHECK_MATERIAL,T_CHECK_PLAN.SHOULD_CHECK_NUM,T_WAREHOUSE_INFO.NAME 
+		FROM T_CHECK_PLAN , T_WAREHOUSE_INFO
+		<where>
+			T_CHECK_PLAN.CHECK_WAREHOUSE = T_WAREHOUSE_INFO.ID
+			AND CHECK_BY IS NULL 
+			<if test="checkPlanDto.planName!=null and checkPlanDto.planName!='' ">
+				AND T_CHECK_PLAN.PLAN_NAME LIKE '%'||#{checkPlanDto.planName}||'%'
+			</if>
+			<if test="checkPlanDto.name!=null and checkPlanDto.name!='' ">
+				AND T_WAREHOUSE_INFO.NAME LIKE '%'||#{checkPlanDto.name}||'%'
+			</if>
+			<if test="checkPlanDto.checkMaterial!=null and checkPlanDto.checkMaterial!='' ">
+				AND T_CHECK_PLAN.CHECK_MATERIAL LIKE '%'||#{checkPlanDto.checkMaterial}||'%'
+			</if>
+			<if test="checkPlanDto.checkProportion!=null and checkPlanDto.checkProportion!='' ">
+				AND T_CHECK_PLAN.CHECK_PROPORTION = #{checkPlanDto.checkProportion}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findCheckPlanByID" resultMap="checkplanResultMap">
+		SELECT * FROM T_CHECK_PLAN WHERE ID = #{id}
+	</select>
+
+	<update id="updateCheckPlan" parameterType="com.zjht.inventory.stock.entity.CheckPlan">
+		UPDATE T_CHECK_PLAN SET
+			CREATE_TIME = #{checkPlan.createTime},
+			CHECK_PROPORTION = #{checkPlan.checkProportion},
+			CHECK_MATERIAL = #{checkPlan.checkMaterial},
+			SHOULD_CHECK_NUM = #{checkPlan.shouldCheckNum}
+		WHERE ID = #{checkPlan.id}
+	</update>
+	
+	<delete id="deletePlan">
+		DELETE FROM T_CHECK_PLAN WHERE ID = #{id}
+	</delete>
+
+	<select id="findExistAssetNo" resultType="java.lang.String">
+		SELECT T_INVENTORY_DETAILED.ASSETS_NO 
+		FROM T_CHECK_PLAN , T_WAREHOUSE_MATERIAL ,T_INVENTORY_DETAILED
+		WHERE T_CHECK_PLAN.CHECK_WAREHOUSE = T_WAREHOUSE_MATERIAL.WAREHOUSE_ID
+		AND T_WAREHOUSE_MATERIAL.ID = T_INVENTORY_DETAILED.WAREHOUSE_MATERIAL_ID
+		AND T_CHECK_PLAN.ID = #{checkPlanId}
+		AND T_INVENTORY_DETAILED.ASSETS_NO IN 
+		<foreach collection="assetList" item="assetNo" open="(" close=")" separator=",">
+	    #{assetNo}
+	    </foreach>
+	</select>
+
+	<select id="findPlanRecordList" parameterType="Map" resultMap="planrecordDtoResultMap">
+		SELECT T_CHECK_PLAN.ID AS cPlan_ID,
+		T_CHECK_PLAN.CREATE_TIME AS cPlan_CREATE_TIME,
+		T_CHECK_PLAN.PLAN_NAME AS cPlan_PLAN_NAME,
+		T_CHECK_PLAN.CHECK_WAREHOUSE AS cPlan_CHECK_WAREHOUSE,
+		T_CHECK_PLAN.CHECK_PROPORTION AS cPlan_CHECK_PROPORTION,
+		T_CHECK_PLAN.CHECK_MATERIAL AS cPlan_CHECK_MATERIAL,
+		T_CHECK_PLAN.SHOULD_CHECK_NUM AS cPlan_SHOULD_CHECK_NUM,
+		T_CHECK_PLAN.CHECK_BY AS cPlan_CHECK_BY,
+		T_CHECK_PLAN.CHECK_TIME AS cPlan_CHECK_TIME ,
+		T_CHECK_PLAN.ACTUAL_CHECK_NUM AS cPlan_ACTUAL_CHECK_NUM,
+		DECODE(T_CHECK_PLAN.CHECK_BY,NULL,'importRecord','differList') AS cPlan_OPERATE ,
+		'0' AS cPlan_DIFFER_NUM,
+		T_CHECK_RESULT.ID AS cResult_ID,
+		T_CHECK_RESULT.PLAN_ID AS cResult_PLAN_ID,
+		T_CHECK_RESULT.ACTUAL_CHECK_NUM AS cResult_ACTUAL_CHECK_NUM,
+		T_CHECK_RESULT.CHECK_BY AS cResult_CHECK_BY, 
+		T_CHECK_RESULT.CHECK_TIME AS cResult_CHECK_TIME,
+		T_CHECK_RESULT.CHECK_RESULT AS cResult_CHECK_RESULT ,
+		T_CHECK_RESULT.CHECK_REMARK AS cResult_CHECK_REMARK, 
+		T_CHECK_RESULT.CHECK_STATUS AS cResult_CHECK_STATUS 
+		FROM T_CHECK_PLAN , T_CHECK_RESULT
+		<where>
+			T_CHECK_PLAN.ID = T_CHECK_RESULT.PLAN_ID
+			<if test="planName!=null and planName!='' ">
+				AND T_CHECK_PLAN.PLAN_NAME LIKE '%'||#{planName}||'%'
+			</if>
+			<if test="checkMaterial!=null and checkMaterial!='' ">
+				AND T_CHECK_PLAN.CHECK_MATERIAL LIKE '%'||#{checkMaterial}||'%'
+			</if>
+			<if test="checkProportion!=null and checkProportion!='' ">
+				AND T_CHECK_PLAN.CHECK_PROPORTION = #{checkProportion}
+			</if>
+			<if test="checkStatus!=null and checkStatus!='' ">
+				AND T_CHECK_RESULT.CHECK_STATUS = #{checkStatus}
+			</if>
+		</where>
+	</select>
+
+	<select id="findExistDetail" resultMap="plandifferDtoResultMap">
+		SELECT T_CHECK_PLAN.ID AS PLAN_ID,
+		T_CHECK_PLAN.CREATE_TIME AS PLAN_CREATE_TIME,
+		T_CHECK_PLAN.PLAN_NAME AS PLAN_PLAN_NAME,
+		T_CHECK_PLAN.CHECK_WAREHOUSE AS PLAN_CHECK_WAREHOUSE,
+		T_CHECK_PLAN.CHECK_PROPORTION AS PLAN_CHECK_PROPORTION,
+		T_CHECK_PLAN.CHECK_MATERIAL AS PLAN_CHECK_MATERIAL,
+		T_CHECK_PLAN.SHOULD_CHECK_NUM AS PLAN_SHOULD_CHECK_NUM,
+		T_CHECK_PLAN.CHECK_BY AS PLAN_CHECK_BY,
+		T_CHECK_PLAN.CHECK_TIME AS PLAN_CHECK_TIME,
+		T_CHECK_PLAN.ACTUAL_CHECK_NUM AS PLAN_ACTUAL_CHECK_NUM,
+		T_WAREHOUSE_MATERIAL.ID AS WAMA_ID,
+		T_WAREHOUSE_MATERIAL.WAREHOUSE_ID AS WAMA_WAREHOUSE_ID,
+		T_WAREHOUSE_MATERIAL.MATERIAL_ID AS WAMA_MATERIAL_ID,
+		T_WAREHOUSE_MATERIAL.INVENTORY_COUNT AS WAMA_INVENTORY_COUNT,
+		T_WAREHOUSE_MATERIAL.REMARK AS WAMA_REMARK,
+		'正常' AS WAMA_CHECK_STATUS , 
+		T_INVENTORY_DETAILED.ID AS INVD_ID,
+		T_INVENTORY_DETAILED.WAREHOUSE_MATERIAL_ID AS INVD_WAREHOUSE_MATERIAL_ID,
+		T_INVENTORY_DETAILED.ASSETS_NO AS INVD_ASSETS_NO,
+		T_INVENTORY_DETAILED.STATUS AS INVD_STATUS ,
+		T_MATERIEL.ID AS MATE_ID ,
+		T_MATERIEL.CODE AS MATE_CODE ,
+		T_MATERIEL.NAME AS MATE_NAME ,
+		T_MATERIEL.MATERIEL_CATEGORY_ID AS MATE_MATERIEL_CATEGORY_ID ,
+		T_MATERIEL.TYPE AS MATE_TYPE ,
+		T_MATERIEL.MAPPING_PRIVATE_TABLE AS MATE_MAPPING_PRIVATE_TABLE,
+		T_MATERIEL.CREATE_TIME AS MATE_CREATE_TIME ,
+		T_CATEGORY.ID AS CATE_ID ,
+		T_CATEGORY.CODE AS CATE_CODE ,
+		T_CATEGORY.NAME AS CATE_NAME ,
+		T_CATEGORY.SUPERIOR_ID AS CATE_SUPERIOR_ID
+		FROM T_CHECK_PLAN , T_WAREHOUSE_MATERIAL, T_INVENTORY_DETAILED,T_MATERIEL , T_CATEGORY
+		WHERE T_CHECK_PLAN.CHECK_WAREHOUSE = T_WAREHOUSE_MATERIAL.WAREHOUSE_ID
+		AND T_WAREHOUSE_MATERIAL.ID = T_INVENTORY_DETAILED.WAREHOUSE_MATERIAL_ID
+		AND T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+		AND T_MATERIEL.MATERIEL_CATEGORY_ID = T_CATEGORY.ID
+		AND T_CHECK_PLAN.ID = #{checkPlanId}
+		AND T_INVENTORY_DETAILED.ASSETS_NO IN 
+		<foreach collection="existList" item="assetNo" open="(" close=")" separator=",">
+	   		#{assetNo}
+	    </foreach>
+	</select>
+
+
+</mapper>

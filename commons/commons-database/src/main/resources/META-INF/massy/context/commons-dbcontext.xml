@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:massy="http://www.smarabbit.org/schema/massy"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+		http://www.smarabbit.org/schema/massy http://www.smarabbit.org/schema/massy.xsd">
+	
+	<massy:annotation-driven/>
+
+	<!--                        -->
+	<!-- usercenter数据库/事务管理器配置 -->
+	<!--                        -->
+	
+	<bean id="propertyConfigurer"  
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:META-INF/massy/context/commons-dbconfig.properties</value>
+            </list>  
+        </property>  
+    </bean>  
+
+	<bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource"
+        destroy-method="close">
+        <property name="url" value="${url}" />
+        <property name="username" value="${username}" />  
+        <property name="password" value="${password}" />  
+        <property name="driverClassName" value="${driverClassName}" />  
+        <property name="filters" value="${filters}" />  
+  
+        <property name="maxActive" value="${maxActive}" />  
+        <property name="initialSize" value="${initialSize}" />  
+        <property name="maxWait" value="${maxWait}" />  
+        <property name="minIdle" value="${minIdle}" />  
+  
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />  
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />  
+  
+        <property name="validationQuery" value="${validationQuery}" />  
+        <property name="testWhileIdle" value="${testWhileIdle}" />  
+        <property name="testOnBorrow" value="${testOnBorrow}" />  
+        <property name="testOnReturn" value="${testOnReturn}" />  
+        <property name="maxOpenPreparedStatements"  
+            value="${maxOpenPreparedStatements}" />  
+        <property name="removeAbandoned" value="${removeAbandoned}" /> <!-- 打开removeAbandoned功能 -->  
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" /> <!-- 1800秒，也就是30分钟 -->  
+        <property name="logAbandoned" value="${logAbandoned}" /> <!-- 关闭abanded连接时输出错误日志 -->  
+    </bean>
+
+    <massy:export-datasource id="commons-datasource" ref="datasource"/>
+
+    <!-- 数据库事务 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="datasource"/>
+	</bean>
+    <massy:export-transactionmanager id="commons.transactionManager" ref="txManager"/>
+
+    <!-- 定义SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <property name="mapperLocations" value="classpath*:/META-INF/mybatis/**/*-mapper.xml"/>
+        <property name="plugins">
+            <list>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <props>
+                            <prop key="dialect">oracle</prop>
+                            <prop key="offsetAsPageNum">true</prop>
+                            <prop key="rowBoundsWithCount">true</prop>
+                        </props>
+                    </property>
+                </bean>
+                <!--<bean class="com.asgard.cfap.plugin.dialect.interceptor.OffsetLimitInterceptor">
+                    <property name="dialectClass" value="com.asgard.cfap.plugin.dialect.OracleDialect"/>
+                </bean>-->
+            </list>
+        </property>
+        <property name="transactionFactory">
+            <bean class="org.mybatis.spring.transaction.SpringManagedTransactionFactory"></bean>
+        </property>
+    </bean>
+    <massy:export-sqlsessionfactory id="commons.sqlSessionFactory" ref="sqlSessionFactory"/>
+</beans>

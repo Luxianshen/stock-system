@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Web控制台</title>
+<#include "/head.ftl">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <!--<h3 class="page-title">
+                    大标题 <small>标题描述</small>
+                </h3>-->
+                <ul class="page-breadcrumb breadcrumb">
+
+                    <li class="btn-group">
+                        <a href="${request.contextPath}/apply/nullify.html?applyId=${apply.id!}" class="btn red delete_btn">
+                            <span><i class="icon-ban-circle"></i> 作废处理</span></a>
+                    </li>
+
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="${request.contextPath}/home.html">Dashboard</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">库存管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">申请列表</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">处理申请</a>
+                    </li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN FORM-->
+                <form id="form" method="post" action="${request.contextPath}/apply/handle.html" class="form-horizontal" role="form">
+                    <div class="form-body">
+                        <input name="applyId" type="hidden" value="${apply.id!}"/>
+                        <h3 class="form-section">清单列表</h3>
+                        <!-- BEGIN PAGE CONTENT-->
+                        <table class="table table-striped table-bordered table-hover dataTable">
+                            <thead>
+                            <tr role="row">
+                                <th width="5px" class=" "></th>
+                                <th class=" ">清单编号</th>
+                                <th class=" ">分类名称</th>
+                                <th class=" ">物料名称</th>
+                                <th class=" ">申请编号</th>
+                                <th class=" ">申请数量</th>
+                                <th width="140px" class=" ">录入资产编号</th>
+                            </tr>
+                            </thead>
+
+                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                            <#if apply.applyLists??>
+                                <#list apply.applyLists as list>
+                                <tr class="${(list_index%2==0)?string('odd','even')}">
+                                    <input value="${list.id!}" name="maps[${list_index}][listId]" type="hidden">
+                                    <td class=" "><span class="row-details row-details-close"></span></td>
+                                    <td class=" ">${list.id!}</td>
+                                    <td class=" ">${list.materielTypeName!}</td>
+                                    <td class=" ">${list.materielName!}</td>
+                                    <td class=" ">${list.applyId!}</td>
+                                    <td class=" ">${list.count!}</td>
+                                    <td class=" ">
+
+                                            <a href="#model${list.id!}" data-toggle="modal" class="btn btn-sm green">录入 <i
+                                                    class="icon-plus"></i></a>
+
+                                            <a onclick="clearK(${list.id!})"
+                                               class="btn btn-sm purple">清空 <i class="icon-remove"></i></a>
+
+                                    </td>
+                                </tr>
+                                <div id="model${list.id!}" class="modal fade" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title"><i class="icon-xing-sign"></i> 录入${list.materielName!}资产编号
+                                                    <span class="badge badge-success addCount${list.id!}">0</span></h4>
+                                            </div>
+                                            <div class="scroller" style="height:200px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+                                                <div class="modal-body">
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+
+                                                    <button onclick="addK(this,'maps[${list_index}][assetsNos]',${list.id!})" type="button" class="btn default">
+                                                        <i class="icon-plus"></i> 点击添加录入框</button>
+
+                                                    <button onclick="addConfirm(this)" type="button" data-dismiss="modal" class="btn green"><i class="icon-file-alt">
+
+                                                    </i> 确认信息</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <tr style="display: none;">
+                                    <td class="details" colspan="7">
+                                        <table>
+                                            <tbody>
+                                                <#if list.applyListProperties??>
+                                                <tr>
+                                                    <#list list.applyListProperties as properties>
+                                                        <#if properties_index%2==0>
+                                                        <tr></#if>
+
+                                                        <td>${properties.propertyName!}</td>
+                                                        <td>&nbsp;&nbsp;</td>
+                                                        <td>${properties.value!}</td>
+
+                                                        <#if properties_index%2==0></tr></#if>
+                                                    </#list>
+                                                </tr>
+                                                </#if>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </#list>
+                            </#if>
+                            </tbody>
+                        </table>
+                        <!-- END PAGE CONTENT-->
+                        <h3 class="form-section">处理信息</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">处理备注</label>
+                                    <div class="col-md-9">
+                                        <input maxlength="100" placeholder="请输入长度不超过100的内容" name="handleRemark" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">领机人</label>
+                                    <div class="col-md-9">
+                                        <input onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" maxlength="10" id="pulsate-regular" name="drawingPerson" type="text" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PAGE -->
+                    <div class="form-actions fluid">
+                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-offset-9 col-md-9">
+
+                                <a href="list.html" class="btn default">返回</a>
+
+                                <input  value="提交" type="submit" class="btn blue">
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<div id="k" class="form-group" style="display:none;">
+    <div class="input-group">
+        <input maxlength="20" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" placeholder="请输入长度不超过20的内容" type="text" class="form-control" name="assetsNos">
+        <span class="input-group-btn">
+            <button onclick="deleteK(this)" class="btn red" type="button"><i class="icon-minus"></i></button>
+        </span>
+    </div>
+</div>
+<#include "/scripts.ftl">
+<#include "/foot.ftl">
+
+<script type="text/javascript"
+        src="${request.contextPath}/metronic/plugins/data-tables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/data-tables/DT_bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/metronic/plugins/select2/select2_metro.css"/>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/select2/select2.min.js"></script>
+<script src="${request.contextPath}/metronic/scripts/table-advanced.js"></script>
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+        if (!jQuery().dataTable) {
+            return;
+        }
+        handlePulsate();
+    });
+    $
+    var handlePulsate = function () {
+        if (!jQuery().pulsate) {
+            return;
+        }
+
+        if (App.isIE8() == true) {
+            return; // pulsate plugin does not support IE8 and below
+        }
+
+        if (jQuery().pulsate) {
+            jQuery('#pulsate-regular').pulsate({
+                color: "#bf1c56"
+            });
+        }
+    }
+
+    function addK(o,name,listId){
+        if(!addConfirm(o)){return;};
+        var k = $("#k").clone(true);
+        k.removeAttr("id");
+        k.show();
+        k.find("input[name='assetsNos']").attr("name",name);
+        $(o).parent().parent().find(".modal-body").append(k);
+        addOrMinus($(".addCount" + listId)[0],true);
+    };
+    function addOrMinus(obj,bo) {
+        var count = obj.innerHTML;
+        count = parseInt(count, 10); //returns 10
+        if(bo){
+            obj.innerHTML = (count+1);
+        }else{
+            obj.innerHTML = (count-1);
+        }
+    };
+    function clearK(o){
+        confirm("确认提示","确认清空该物料的资产编号登记吗?",function(status) {
+            if (status) {
+                $("#model"+o).find(".modal-body").empty();
+                $(".check-count"+o).find("input[name='operateNum']").val(0);
+                $(".addCount"+o)[0].innerHTML = 0;
+            }
+        });
+    };
+    function deleteK(o){
+        var parent = $(o).parent().parent().parent();
+        addOrMinus(parent.parent().parent().parent().parent().find(".badge-success")[0],false);
+        parent.remove();
+    };
+
+    /**
+     * 添加前判断已有的input是否合格
+     * @param obj
+     * @returns {boolean} true 正确, false 错误
+     */
+    function addConfirm(obj) {
+        var boo = true;
+        var param = $(obj).parent().parent().find(".modal-body").find("input[name]");
+        param.each(function(o,i){
+            var val = $(this).val();
+            if(val.indexOf(",")>0){
+                alert("资产编号不应含','符号,请重新输入!");
+                $(this).val("");
+                boo = false;
+                return boo;
+            }
+            /*if(val==""){
+                alert("资产编号不应存在空值,请先补充已添加的输入框!");
+                boo = false;
+                return boo;
+            }*/
+        });
+        return boo;
+    };
+
+    $(".row-details").click(function () {
+        var css = $(this).attr("class");
+        var detail = $(this).parent().parent().next();
+        if (css.indexOf("close") > 0) {
+            //显示详情
+            detail.show();
+            $(this).attr("class", "row-details row-details-open");
+        } else {
+            //隐藏详情
+            detail.hide();
+            $(this).attr("class", "row-details row-details-close");
+        }
+    });
+
+    function isRepeat(arr){
+        var a = new Array;
+        for(var i=0;i<arr.length;i++){
+            if(arr[i].name.indexOf("assetsNos")<0){
+                continue;
+            }
+            a.push(arr[i].value);
+        }
+        var nary = a.sort();
+        for(var i=0;i<arr.length-1;i++){
+            if (nary[i]!=undefined && nary[i]==nary[i+1]){
+                alert("请删除\""+nary[i]+"\", 这个重复录入的资产编号!");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function commitAjax(o){
+        $(o).hide();
+        var form = $("#form");
+        var serialize = form.serialize();
+        var arr = form.serializeArray();
+        if(isRepeat(arr)){
+            $(o).show();
+            return;
+        }
+        var url = form.attr("action");
+        showMask();
+        $.post(url,serialize,function(data){
+            if(data==true){
+                alert("处理成功");
+                $(o).remove();
+            }else{
+                alert(data);
+                $(o).show();
+            }
+        });
+        hiddenMask();
+    };
+</script>
+<!-- END JAVASCRIPTS -->
+
+</body>
+<!-- END BODY -->
+
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>新增仓库</title>
+<#include "/head.ftl">
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_0">
+
+                        <div class="tab-pane" id="tab_6">
+                            <div class="portlet box light_grey ">
+                                <div class="portlet-title">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <ul class="page-breadcrumb breadcrumb">
+                                                <li>
+                                                    <i class="icon-home"></i>
+                                                    <a href="${request.contextPath}">首页</a>
+                                                    <i class="icon-angle-right"></i>
+                                                </li>
+                                                <li>
+                                                    <a href="${request.contextPath}/repertory/list.html">仓库管理</a>
+                                                    <i class="icon-angle-right"></i>
+                                                </li>
+                                                <li><a href="${request.contextPath}/repertory/preadd.html">仓库数据的新增</a></li>
+                                            </ul>
+                                            <!-- END PAGE TITLE & BREADCRUMB-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form action="${request.contextPath}/repertory/add.html" method="post"
+                                          class="form-horizontal" id="addForm">
+                                        <div class="form-body">
+
+                                            <div class="alert alert-danger display-hide">
+                                                <button class="close" data-dismiss="alert"></button>
+                                                数据有误，请修改过后再提交
+                                            </div>
+                                            <div class="alert alert-success display-hide">
+                                                <button class="close" data-dismiss="alert"></button>
+                                                数据正确，已成功创建一个仓库
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"><span class="required">*</span>仓库名称：</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" placeholder="请输入仓库名称" class="form-control"
+                                                           name="name" id="name" data-required="1"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"><span class="required">*</span>仓库地址：</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" placeholder="请输入仓库地址" name="address"
+                                                           class="form-control" data-required="1"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"><span class="required">*</span>管理员：</label>
+                                                <div class="col-md-4">
+                                                    <select class="form-control" id="company" name="company">
+                                                        <option value="">-----公司-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"></label>
+                                                <div class="col-md-4">
+                                                    <select class="form-control" id="department" name="department">
+                                                        <option value="">-----部门-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3"></label>
+                                                <div class="col-md-4">
+                                                    <select class="form-control" name="warehouseKeeper" id="employee">
+                                                        <option value="">-----员工-----</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">备注信息：</label>
+                                                <div class="col-md-4">
+                                                    <textarea class="form-control" name="remark">备注信息</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-actions ">
+                                                <br><br>
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn blue">提交</button>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <a href="${request.contextPath}/repertory/list.html"
+                                                       class="btn default">取消</a>
+                                                </div>
+                                            </div>
+
+                                    </form>
+                                    <!-- END FORM-->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- END PAGE CONTENT -->
+</div>
+<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+
+
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript"
+        src="${request.contextPath}/repertory/jquery.validate.min.js"></script>
+<script type="text/javascript"
+        src="${request.contextPath}/repertory/additional-methods.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/select2/select2.min.js"></script>
+<script type="text/javascript"
+        src="${request.contextPath}/metronic/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript"
+        src="${request.contextPath}/metronic/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="${request.contextPath}/metronic/plugins/ckeditor/ckeditor.js"></script>
+
+<script type="text/javascript" src="${request.contextPath}/repertory/initwarehousekeeper.js" ></script>
+<!-- END PAGE LEVEL PLUGINS -->
+
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+
+        var form1 = $('#addForm');
+        var error1 = $('.alert-danger', form1);
+        var success1 = $('.alert-success', form1);
+
+        form1.validate({
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "",
+            rules: {
+                name: {
+                    minlength: 2,
+                    required: true,
+                    remote:{
+                        url:"${request.contextPath}/repertory/nameUnique.html",
+                        type:"POST",
+                        dataType:"json",
+                        data:{
+                            name:function(){
+                                return $("#name").val();
+                            }
+                        }
+                    }
+                },
+                address: {
+                    minlength: 2,
+                    required: true
+                },
+                company: {
+                    required: true
+                },
+                department: {
+                    required: true
+                },
+                warehouseKeeper: {
+                    required: true
+                },
+                remark: {
+                    required: false
+                }
+            },
+
+            messages:{
+                name:{
+                    required:"仓库名称必须填写",
+                    minlength:"最小长度为2个字符",
+                    remote:"仓库名称不允许重复，请重新填写"
+                },
+                address:{
+                    required:"仓库地址必须填写",
+                    minlength:"最小长度为2个字符",
+                },
+                company:{
+                    required:"公司机构必须填写",
+                },
+                department:{
+                    required:"所属部门必须填写",
+                },
+                warehouseKeeper:{
+                    required:"员工必须填写",
+                }
+            },
+            invalidHandler: function (event, validator) { //display error alert on form submit
+                success1.hide();
+                error1.show();
+                App.scrollTo(error1, -200);
+            }
+            ,
+
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+            }
+            ,
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            }
+            ,
+
+            success: function (label) {
+                label
+                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+            }
+            ,
+
+            submitHandler: function (form) {
+                $('.name').change(function () {
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "${request.contextPath}/repertory/nameUnique.html?name="+name.value,
+                        success: function (data) {
+                            if(data==false){
+                                name.clear();
+                                $('.name').val('');
+                                alert("仓库名已存在,请重新填写");
+                            }
+                        },
+                    });
+                })
+                success1.show();
+                error1.hide();
+                form.method = "post";
+                form.action = "${request.contextPath}/repertory/add.html";
+                form.submit();
+            }
+        });
+
+    });
+</script>
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

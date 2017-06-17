@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/html">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>库存明细</title>
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a href="#" class="btn btn-sm blue">采购入库 <i class="icon-signin"></i></a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="index.html">Dashboard</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">库存管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="#">库存明细</a></li>
+                </ul>
+
+
+                <form action="${request.contextPath}/inventory/search.html" method="post">
+                    <input type="hidden" name="materialId" value="${materialId!}" />
+                    <div class="row">
+                <#if metadatas??>
+                    <#list metadatas as metadata>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="senglishName">${metadata.name}</label>
+                                <input type="text" class="form-control" name="maps[${metadata_index}][${metadata.code}]"
+                                       placeholder="请输入搜索关键字">
+                            </div>
+                        </div>
+
+                    </#list>
+                </#if>
+                    </div>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <input type="submit" value="搜索" class="btn blue btn-block">
+                        <i class="m-icon-swapright m-icon-white"></i></input>
+                        <br>
+                    </div>
+                    <div class="col-md-5"></div>
+                </form>
+
+
+                    <div class="col-md-14">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                            <tr>
+                            <#if metadatas??>
+                                <#list metadatas as metadata>
+                                <th>${metadata.name}</th>
+                                </#list>
+                                <th>操作</th>
+                            </#if>
+                            </tr>
+                            </thead>
+                            <tbody role="alert" aria-live="polite" aria-relevant="all">
+
+
+                            <#if propertyMap??>
+                                <#list propertyMap as map>
+                                <tr>
+                                    <#list map?keys as itemKey>
+                                        <td >${map[itemKey]}</td>
+                                    </#list>
+                                    <td>
+                                        <a href="#" class="btn btn-sm default">出库 <i class="icon-signout"></i></a>
+                                        <#if map['STATUS']==STOCK_NORMAL || map['STATUS']==STOCK_LOCK>
+                                            <a href="${request.contextPath}/inventory/lockAndUnlock.html?materialId=${materialId}&detailedId=${map['INVENTORY_DETAILED_ID']}"
+                                               class="btn btn-sm ${(map['STATUS']==STOCK_NORMAL)?string('dark','green')} delete_btn" methods="ajax" property="锁定(lock),解锁(unlock)"
+                                               data-content="您正在${(map['STATUS']==STOCK_NORMAL)?string('锁定','解锁')}物料,确定继续执行吗?"
+                                               message="${(map['STATUS']==STOCK_NORMAL)?string('锁定','解锁')}完成!">
+                                                ${(map['STATUS']==STOCK_NORMAL)?string('锁定','解锁')}
+                                                <i class="icon-${(map['STATUS']==STOCK_NORMAL)?string('lock','unlock')}"></i>
+                                            </a>
+                                        </#if>
+                                    </td>
+                                </tr>
+                                </#list>
+                            </#if>
+
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+    });
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

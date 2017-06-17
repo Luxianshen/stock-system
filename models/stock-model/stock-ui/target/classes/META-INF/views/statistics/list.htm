@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>仓库物料列表</title>
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+
+            <div class="col-md-12">
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <div class="btn dropdown-toggle">
+
+                            <select id="mySelect" name="warehouseId"
+                                    onchange="show_sub(this.options[this.options.selectedIndex].value)">
+                            <#if warehouseName??>
+                                <option value="warehouseName" selected="selected">${warehouseName}</option>
+                            <#else>
+                                <option value="" selected="selected">请选择仓库</option>
+                            </#if>
+
+                            <#if warehouseInfoList??>
+                                <#list warehouseInfoList as warehouse>
+                                    <#if warehouseName ??>
+                                        <#if warehouse.name != warehouseName>
+                                            <option value="${warehouse.name!}">${warehouse.name!}</option>
+                                        </#if>
+                                    <#else >
+                                        <option value="${warehouse.name!}">${warehouse.name!}</option>
+                                    </#if>
+
+                                </#list>
+                            </#if>
+                            </select>
+
+                        </div>
+
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="${request.contextPath}">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${request.contextPath}/statistics/searchlist.html">统计物料管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="${request.contextPath}/statistics/searchlist.html">统计列表</a></li>
+                </ul>
+                <div class="portlet-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                            <tr>
+                                <th>物料名称</th>
+                                <th>库存数量</th>
+                                <th>操作栏</th>
+                            </tr>
+                            </thead>
+                        <tbody>
+                        <#if materialList??>
+                            <#list materialList.list as material>
+                            <tr>
+                                <td>${material.NAME!}</td>
+                                <td>${material.NUM!}</td>
+                                <td>
+                                    <#if material.TYPE?? && material.TYPE != 0>
+                                        <#if material.ID?? && material.WAREHOUSEID??>
+                                            <a href="${request.contextPath}/inventory/list.html?materialId=${material.MATERIALID!}&warehouseId=${material.WAREHOUSEID}"
+                                               class="btn default btn-xs purple">查看明细</a>
+                                        <#else>
+                                            <a href="${request.contextPath}/inventory/list.html?materialId=${material.MATERIALID!}&warehouseId="
+                                               class="btn default btn-xs purple">查看明细</a>
+                                        </#if>
+                                    <#else>
+                                    </#if>
+
+                                </td>
+                            </tr>
+                            </#list>
+                        </tbody>
+                        </#if>
+                        </table>
+                    </div>
+                <@page result=materialList></@page>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+    });
+</script>
+<script type="text/JavaScript">
+    function show_sub(v) {
+        document.getElementById('mySelect').value = 'v';
+        window.location.href = "${request.contextPath}/statistics/searchlist.html?warehouseName=" + v;
+    }
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

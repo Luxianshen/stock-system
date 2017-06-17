@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.test.dao.mapper.WarehouseMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.WarehouseInfo" id="warehouseResultMap">
+        <id property="id" column="ID" javaType="java.lang.String"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+        <result property="organBelong" column="ORGAN_BELONG" javaType="java.lang.String"/>
+        <result property="address" column="ADDRESS" javaType="java.lang.String"/>
+        <result property="warehouseKeeper" column="WAREHOUSE_KEEPER" javaType="java.lang.String"/>
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date"/>
+        <result property="remark" column="REMARK" javaType="java.lang.String"/>
+        <result property="status" column="STATUS" javaType="java.lang.String"/>
+
+    </resultMap>
+   <!--<insert id="save" useGeneratedKeys="true" keyProperty="warehouse.id" keyColumn="id" parameterType="com.zjht.inventory.test.entity.WarehouseInfo">
+        INSERT INTO T_WAREHOUSE_INFO(ID,NAME,ORGAN_BELONG,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK)
+        VALUES
+        (#{warehouse.id,jdbcType=VARCHAR},
+        #{warehouse.name,jdbcType=VARCHAR},
+        #{warehouse.organBelong,jdbcType=VARCHAR},
+        #{warehouse.address,jdbcType=VARCHAR},
+        #{warehouse.warehouseKeeper,jdbcType=VARCHAR},
+        #{warehouse.createTime,jdbcType=DATE},
+        #{warehouse.status,jdbcType=VARCHAR},
+        #{warehouse.remark,jdbcType=VARCHAR})
+    </insert>-->
+
+    <!--<select id="findById" resultType="com.zjht.inventory.test.entity.Test">
+        SELECT ID, NAME FROM TEST WHERE ID = #{id}
+    </select>-->
+
+    <!--ID,NAME,ORGAN_BELONG,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK-->
+    <select id="findAll" resultType="com.zjht.inventory.stock.entity.WarehouseInfo">
+        SELECT * FROM T_WAREHOUSE_INFO
+    </select>
+
+    <!--<update id="updateBy" parameterType="com.zjht.inventory.test.entity.Test">
+        UPDATE  TEST SET NAME = #{test.name} WHERE ID = #{test.id}
+    </update>-->
+
+</mapper>

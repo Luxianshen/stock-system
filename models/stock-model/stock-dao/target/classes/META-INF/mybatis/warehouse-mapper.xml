@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.WarehouseMapper">
+
+    <resultMap autoMapping="true" id="wareResultMap" type="com.zjht.inventory.stock.entity.WarehouseInfo">
+        <id property="id" column="ID" javaType="java.lang.Long"></id>
+        <result property="name" column="NAME" javaType="java.lang.String"></result>
+        <result property="organBelong" column="ORGAN_BELONG" javaType="java.lang.String" />
+        <result property="address" column="ADDRESS" javaType="java.lang.String" />
+        <result property="warehouseKeeper" column="WAREHOUSE_KEEPER" javaType="java.lang.String" />
+        <result property="createTime" column="CREATE_TIME" javaType="java.util.Date" />
+        <result property="remark" column="REMARK" javaType="java.lang.String" />
+        <result property="status" column="STATUS" javaType="java.lang.String" />
+
+    </resultMap>
+
+    <insert id="saveWarehouse" useGeneratedKeys="true" keyProperty="warehouse.id" keyColumn="id" parameterType="com.zjht.inventory.stock.entity.WarehouseInfo">
+        INSERT INTO T_WAREHOUSE_INFO(ID,NAME,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK)
+        VALUES
+        (#{warehouse.id,jdbcType=VARCHAR},
+        #{warehouse.name,jdbcType=VARCHAR},
+        #{warehouse.address,jdbcType=VARCHAR},
+        #{warehouse.warehouseKeeper,jdbcType=VARCHAR},
+        #{warehouse.createTime,jdbcType=DATE},
+        #{warehouse.status,jdbcType=VARCHAR},
+        #{warehouse.remark,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="findAll" resultMap="wareResultMap">
+        SELECT ID,NAME,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK FROM T_WAREHOUSE_INFO WHERE STATUS = 1
+    </select>
+
+    <select id="FindList" resultMap="wareResultMap">
+        SELECT ID,NAME,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK FROM T_WAREHOUSE_INFO WHERE STATUS = 1
+    </select>
+
+    <select id="findSomeWarehouse" parameterType="com.zjht.inventory.stock.entity.WarehouseInfo" resultMap="wareResultMap">
+        SELECT ID,NAME,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK FROM T_WAREHOUSE_INFO
+        <where>
+            <if test="warehouse.name!=null and warehouse.name!='' ">
+                NAME LIKE concat(concat('%',#{warehouse.name}),'%')
+            </if>
+            <if test="warehouse.address!= null and warehouse.address!='' ">
+                AND ADDRESS LIKE concat(concat('%',#{warehouse.address}),'%')
+            </if>
+            <if test="warehouse.warehouseKeeper!= null and warehouse.warehouseKeeper!=''">
+                AND WAREHOUSE_KEEPER = #{warehouse.warehouseKeeper,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findWarehouseById"  resultMap="wareResultMap">
+        SELECT * FROM T_WAREHOUSE_INFO WHERE id = #{id}
+    </select>
+
+    <update id="updateWarehouse" parameterType="com.zjht.inventory.stock.entity.WarehouseInfo">
+        UPDATE  T_WAREHOUSE_INFO SET
+        WAREHOUSE_KEEPER = #{warehouse.warehouseKeeper,jdbcType=VARCHAR},REMARK=#{warehouse.remark,jdbcType=VARCHAR}
+        <where>
+            <if test="warehouse.id!= null and warehouse.id!=''">
+                ID = #{warehouse.id,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <update id="removeWarehouse" parameterType="com.zjht.inventory.stock.entity.WarehouseInfo">
+        UPDATE  T_WAREHOUSE_INFO SET
+        STATUS = #{warehouse.status,jdbcType=VARCHAR}
+        <where>
+            <if test="warehouse.id!= null and warehouse.id!=''">
+                ID = #{warehouse.id,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <select id="findWarehouseInfoByWarehouseKepper" resultMap="wareResultMap">
+    	SELECT * FROM T_WAREHOUSE_INFO
+        <where>
+            <if test="warehouseKepper!= null and warehouseKepper!=''">
+                WAREHOUSE_KEEPER = #{warehouseKepper,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findWarehouseKeeperList" resultMap="wareResultMap">
+        SELECT DISTINCT WAREHOUSE_KEEPER FROM T_WAREHOUSE_INFO
+    </select>
+
+    <select id="findWarehouseByName" resultMap="wareResultMap">
+        SELECT ID,NAME,ADDRESS,WAREHOUSE_KEEPER,CREATE_TIME,STATUS,REMARK FROM T_WAREHOUSE_INFO
+        <where>
+            <if test="name!= null and name!=''">
+                NAME = #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+</mapper>

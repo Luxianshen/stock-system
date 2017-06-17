@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>Web控制台</title>
+    <#include "/head.ftl">
+        <link rel="stylesheet" type="text/css" href="${request.contextPath}/metronic/plugins/bootstrap-datepicker/css/datepicker.css" >
+        <script type="text/javascript" src="${request.contextPath}/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        </head>
+        <!-- END HEAD -->
+        <!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+    <div class="clearfix"></div>
+
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container">
+        <#include "/page_sidebar.ftl">
+            <!-- BEGIN PAGE -->
+            <div class="page-content">
+                <#-- //TODO inert main content into here  -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                            <!--<h3 class="page-title">
+                                大标题 <small>标题描述</small>
+                            </h3>-->
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li class="btn-group">
+                                    <a href="${request.contextPath}/scheduing/derive.html" class="btn blue"><span>导出</span></a>
+                                </li>
+                                <li>
+                                    <i class="icon-home"></i>
+                                    <a href="index.html">Dashboard</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li>
+                                    <a href="#">库存管理</a>
+                                    <i class="icon-angle-right"></i>
+                                </li>
+                                <li><a href="#">出/入库记录</a></li>
+                            </ul>
+                            <!-- END PAGE TITLE & BREADCRUMB-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="booking-search">
+                                <form action="${request.contextPath}/scheduing/record.html" method="get"
+                                      role="form"enctype="application/x-www-form-urlencoded">
+                                    <div class="row form-group">
+                                        <div class="col-md-4">
+                                            <label class="control-label">申请编号</label>
+                                            <input name="applyId" value="${scheduing.applyId!}" type="text" class="form-control" placeholder="输入订单编号">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">订单编号</label>
+                                            <input name="orderId" value="${scheduing.orderId!}" type="text" class="form-control" placeholder="输入订单编号">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">申请类型</label>
+                                            <select name="inOutType" class="form-control select2me" data-placeholder="Select...">
+                                                <option value="">选择..</option>
+                                                <option ${((scheduing.inOutType==1)?string("selected='selected'",""))!} value="1">生产出库</option>
+                                                <option ${((scheduing.inOutType==2)?string("selected='selected'",""))!} value="2">调拨出库</option>
+                                                <option ${((scheduing.inOutType==3)?string("selected='selected'",""))!} value="3">返修出库</option>
+                                                <option ${((scheduing.inOutType==4)?string("selected='selected'",""))!} value="4">换机出库</option>
+                                                <option ${((scheduing.inOutType==5)?string("selected='selected'",""))!} value="5">借用出库</option>
+
+                                                <option ${((scheduing.inOutType==8)?string("selected='selected'",""))!} value="8">锁定</option>
+
+                                                <option ${((scheduing.inOutType==14)?string("selected='selected'",""))!} value="14">盘点入库</option>
+                                                <option ${((scheduing.inOutType==15)?string("selected='selected'",""))!} value="15">采购入库</option>
+                                                <option ${((scheduing.inOutType==16)?string("selected='selected'",""))!} value="16">生产入库</option>
+                                                <option ${((scheduing.inOutType==17)?string("selected='selected'",""))!} value="17">调拨入库</option>
+                                                <option ${((scheduing.inOutType==18)?string("selected='selected'",""))!} value="18">返修入库</option>
+                                                <option ${((scheduing.inOutType==19)?string("selected='selected'",""))!} value="19">换机入库</option>
+                                                <option ${((scheduing.inOutType==20)?string("selected='selected'",""))!} value="20">借用入库</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-md-4">
+                                            <label class="control-label">操作人</label>
+                                            <input name="operator" value="${scheduing.operator!}" type="text" class="form-control" placeholder="输入订单编号">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">领机人</label>
+                                            <input name="drawingPerson" value="${scheduing.drawingPerson!}" type="text" class="form-control" placeholder="输入订单编号">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">操作时间</label>
+                                            <div class="input-group date-picker input-daterange" data-date="2012-10-11" data-date-format="yyyy-mm-dd">
+                                                <input id="defaultrange" type="text" class="form-control" name="startTime" value="${startTime!}">
+                                                <span class="input-group-addon">to</span>
+                                                <input id="reportrange" type="text" class="form-control" name="endTime" value="${endTime!}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-2">
+                                            <button class="btn blue btn-block">搜索<i class="m-icon-swapright m-icon-white"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-5"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr hr-16 hr-dotted"></div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                                <tr align="center">
+                                    <th>出/入库流水号</th>
+                                    <th>申请类型</th>
+                                    <th>申请编号</th>
+                                    <th>订单编号</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                    <th>领机人</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <#if scheduings??>
+                                <#list scheduings.list as scheduing>
+                                    <tr align="left">
+                                        <td>${scheduing.systrace!}</td>
+                                        <td>${scheduing.inOutType!}</td>
+                                        <td>${scheduing.applyId!}</td>
+                                        <td>${scheduing.orderId!}</td>
+                                        <td>${scheduing.operator!}</td>
+                                        <td>${scheduing.operateTime?string("yyyy-MM-dd HH:mm")!}</td>
+                                        <td>${scheduing.drawingPerson!}</td>
+                                        <td>
+                                            <a href="${request.contextPath}/scheduing/detail.html?systrace=${scheduing.systrace!}" class="btn default btn-xs blue">查看明细
+                                                <i class="icon-share"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </#list>
+                            </#if>
+                            </tbody>
+                        </table>
+                    </div>
+                <@page result=scheduings></@page>
+            </div>
+            <!-- END PAGE -->
+    </div>
+    <!-- END CONTAINER -->
+
+    <#include "/foot.ftl">
+        <#include "/scripts.ftl">
+            <script>
+                jQuery(document).ready(function() {
+                    App.init(); // initlayout and core plugins
+                });
+            </script>
+            <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

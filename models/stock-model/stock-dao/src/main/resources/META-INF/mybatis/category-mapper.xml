@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.CategoryMapper">
+
+    <resultMap type="com.zjht.inventory.stock.entity.Category" id="cateResultMap">
+        <id property="id" column="ID" javaType="java.lang.Long"/>
+        <result property="superiorId" column="SUPERIOR_ID" javaType="java.lang.Long"/>
+        <result property="code" column="CODE" javaType="java.lang.String"/>
+        <result property="name" column="NAME" javaType="java.lang.String"/>
+        <result property="isdel" column="ISDEL" javaType="java.lang.Long"/>
+        <association property="categories" column="ID" select="findChildBySuperiorId"/>
+    </resultMap>
+
+
+    <select id="findBySuperiorId" resultMap="cateResultMap">
+        SELECT * FROM T_CATEGORY
+        <where>
+            1=1
+            <if test="superiorId!=null">
+                and SUPERIOR_ID = #{superiorId}
+            </if>
+            <if test="superiorId==null">
+                and 0>=SUPERIOR_ID
+            </if>
+        </where>
+        order by ID desc
+    </select>
+
+    <select id="findChildBySuperiorId" resultMap="cateResultMap">
+        SELECT * FROM T_CATEGORY
+        <where>
+            SUPERIOR_ID = #{ID}
+        </where>
+    </select>
+
+    <select id="findById" resultMap="cateResultMap">
+        SELECT * FROM T_CATEGORY
+        <where>
+            ID = #{id}
+        </where>
+    </select>
+
+
+    <select id="findTreeData" resultMap="cateResultMap">
+        SELECT * FROM T_CATEGORY WHERE ISDEL = 0
+    </select>
+
+	<select id="findByParams" parameterType="Map" resultMap="cateResultMap">
+		SELECT DISTINCT T_CATEGORY.*
+			FROM T_WAREHOUSE_MATERIAL,T_MATERIEL,T_CATEGORY
+			WHERE T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+			AND T_MATERIEL.MATERIEL_CATEGORY_ID = T_CATEGORY.ID
+			<if test="warehouseId!=null and warehouseId!='' ">
+                AND T_WAREHOUSE_MATERIAL.WAREHOUSE_ID = #{warehouseId}
+            </if>
+			<if test="superiorId!=null">
+                AND T_CATEGORY.SUPERIOR_ID = #{superiorId}
+            </if>
+            <if test="superiorId==null">
+                AND 0>=T_CATEGORY.SUPERIOR_ID
+            </if>
+	</select>
+
+	<select id="findByWarehouseId" parameterType="Map" resultMap="cateResultMap">
+		SELECT DISTINCT T_CATEGORY.*
+			FROM T_WAREHOUSE_MATERIAL,T_MATERIEL,T_CATEGORY
+			WHERE T_WAREHOUSE_MATERIAL.MATERIAL_ID = T_MATERIEL.ID
+			AND T_MATERIEL.MATERIEL_CATEGORY_ID = T_CATEGORY.ID
+			AND T_CATEGORY.ID = #{superiorId}
+			<if test="warehouseId!=null and warehouseId!='' ">
+                AND T_WAREHOUSE_MATERIAL.WAREHOUSE_ID = #{warehouseId}
+            </if>
+	</select>
+
+    <insert id="addNewCategory" parameterType="com.zjht.inventory.stock.entity.Category">
+
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT T_CATEGORY_SEQ.nextval FROM DUAL
+        </selectKey>
+         INSERT INTO T_CATEGORY(
+                ID,
+                CODE,
+                NAME,
+                SUPERIOR_ID,
+                ENCODER,
+                ISDEL
+                )
+        VALUES (
+        #{id},
+        #{category.code},
+        #{category.name},
+        #{category.superiorId},
+        #{category.encoder},
+        #{category.isdel})
+    </insert>
+    <update id="updateCategory"  parameterType="com.zjht.inventory.stock.entity.Category">
+        UPDATE T_CATEGORY
+        <trim prefix="set" suffixOverrides=",">
+            <if test="category.code!=null">CODE=#{category.code},</if>
+            <if test="category.name!=null"> NAME =#{category.name},</if>
+            <if test="category.encoder!=null"> ENCODER=#{category.encoder},</if>
+        </trim>
+        WHERE ID=#{category.id}
+    </update>
+
+    <update id="delCategory"  parameterType="com.zjht.inventory.stock.entity.Category">
+        UPDATE T_CATEGORY SET
+        ISDEL=1
+        WHERE ID=#{id}
+    </update>
+
+
+</mapper>

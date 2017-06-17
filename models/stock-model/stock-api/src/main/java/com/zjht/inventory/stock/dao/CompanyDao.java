@@ -1,0 +1,12 @@
+package com.zjht.inventory.stock.dao;
+
+import com.zjht.inventory.stock.entity.Company;
+
+import java.util.List;
+
+/**
+ * Created by longshuzhen on 2016/10/27.
+ */
+public interface CompanyDao {
+    List<Company> getCompanyList();
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zjht.inventory.stock.dao.mapper.GeneratorMapper">
+    <select id="next" resultType="java.lang.Long">
+        SELECT ${seq}.NEXTVAL FROM DUAL
+    </select>
+    <select id="nextGeneral" resultType="java.lang.Long">
+        SELECT KCGL_INCREMENT_SEQ.NEXTVAL FROM DUAL
+    </select>
+</mapper>

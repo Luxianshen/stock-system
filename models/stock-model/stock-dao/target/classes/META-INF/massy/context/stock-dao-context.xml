@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:massy="http://www.smarabbit.org/schema/massy"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.smarabbit.org/schema/massy http://www.smarabbit.org/schema/massy.xsd">
+
+    <!-- 激活注解驱动 -->
+    <massy:annotation-driven/>
+    <tx:annotation-driven/>
+    <context:annotation-config/>
+    <massy:import-sqlsessionfactory id="sqlSessionFactory" alias="commons.sqlSessionFactory"/>
+    <!-- 引入服务 -->
+    <massy:import-datasource id="datasource"/>
+
+    <!--dao-->
+    <bean id="applyDao" class="com.zjht.inventory.stock.dao.ApplyDaoImpl">
+        <property name="applyMapper" ref="applyMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="applyMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.ApplyMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+
+
+    <!--dao-->
+    <bean id="scheduingDao" class="com.zjht.inventory.stock.dao.ScheduingDaoImpl">
+        <property name="scheduingMapper" ref="scheduingMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="scheduingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.ScheduingMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+
+    <!--dao-->
+    <bean id="materialDao" class="com.zjht.inventory.stock.dao.MaterialDaoImpl">
+        <property name="materialMapper" ref="materialMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="materialMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.MaterialMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="todoDao" class="com.zjht.inventory.stock.dao.TodoDaoImpl">
+        <property name="todoMapper" ref="todoMapper"/>
+    </bean>
+    <bean id="todoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.TodoMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="warehouseDao" class="com.zjht.inventory.stock.dao.WarehouseDaoImpl">
+        <property name="warehouseMapper" ref="warehouseMapper"/>
+    </bean>
+    <bean id="warehouseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.WarehouseMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--dao-->
+    <bean id="managerDao" class="com.zjht.inventory.stock.dao.ManagerDaoImpl">
+        <property name="managerMapper" ref="managerMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="managerMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.ManagerMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--dao-->
+    <bean id="metadata" class="com.zjht.inventory.stock.dao.MetadataDaoImpl">
+        <property name="metadataMapper" ref="metadataMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="metadataMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.MetadataMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--dao-->
+    <bean id="inventoryDetailedDao" class="com.zjht.inventory.stock.dao.InventoryDetailedDaoImpl">
+        <property name="inventoryDetailedMapper" ref="inventoryDetailedMapper"/>
+    </bean>
+    <!--mybatis mapper-->
+    <bean id="inventoryDetailedMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.InventoryDetailedMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="checkPlanDao" class="com.zjht.inventory.stock.dao.CheckPlanDaoImpl">
+        <property name="checkPlanMapper" ref="checkPlanMapper"/>
+    </bean>
+    <bean id="checkPlanMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.CheckPlanMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="warehouseMaterialDao" class="com.zjht.inventory.stock.dao.WarehouseMaterialDaoImpl">
+        <property name="warehouseMaterialMapper" ref="warehouseMaterialMapper"/>
+    </bean>
+    <bean id="warehouseMaterialMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.WarehouseMaterialMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="checkResultDao" class="com.zjht.inventory.stock.dao.CheckResultDaoImpl">
+        <property name="checkResultMapper" ref="checkResultMapper"/>
+    </bean>
+    <bean id="checkResultMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.CheckResultMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="companyDao" class="com.zjht.inventory.stock.dao.CompanyDaoImpl">
+        <property name="companyMapper" ref="companyMapper"/>
+    </bean>
+    <bean id="companyMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.CompanyMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="departmentDao" class="com.zjht.inventory.stock.dao.DepartmentDaoImpl">
+        <property name="departmentMapper" ref="departmentMapper"/>
+    </bean>
+    <bean id="departmentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.DepartmentMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="employeeDao" class="com.zjht.inventory.stock.dao.EmployeeDaoImpl">
+        <property name="employeeMapper" ref="employeeMapper"/>
+    </bean>
+    <bean id="employeeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.EmployeeMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="categoryDao" class="com.zjht.inventory.stock.dao.CategoryDaoImpl">
+        <property name="categoryMapper" ref="categoryMapper"/>
+    </bean>
+    <bean id="categoryMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.CategoryMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="dictionaryDao" class="com.zjht.inventory.stock.dao.DictionaryDaoImpl">
+        <property name="dictionaryMapper" ref="dictionaryMapper"/>
+    </bean>
+    <bean id="dictionaryMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.DictionaryMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    
+      <bean id="checkDetailDao" class="com.zjht.inventory.stock.dao.CheckDetailDaoImpl">
+        <property name="checkDetailMapper" ref="checkDetailMapper"/>
+    </bean>
+    <bean id="checkDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.zjht.inventory.stock.dao.mapper.CheckDetailMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+
+</beans>

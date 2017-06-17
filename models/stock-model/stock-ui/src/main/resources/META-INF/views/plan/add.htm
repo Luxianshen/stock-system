@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+<title>Web控制台</title> 
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<#include "/scripts.ftl">
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+	<#include "/page_head.ftl">
+
+	<div class="clearfix"></div>
+
+	<!-- BEGIN CONTAINER -->
+	<div class="page-container">
+		<#include "/page_sidebar.ftl">
+		<!-- BEGIN PAGE -->
+		<div class="page-content">
+			<#-- //TODO inert main content into here -->
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+					<!--<h3 class="page-title">    大标题 <small>标题描述</small></h3>-->
+					<ul class="page-breadcrumb breadcrumb">
+						<li class="btn-group">
+							<a href="${request.contextPath}/plan/list.html" class="btn blue"><span>返回</span></a>
+						</li>
+						<li><i class="icon-home"></i> 
+							<a href="index.html">主页</a>
+							<i class="icon-angle-right"></i>
+						</li>
+						<li><a href="#">盘点计划</a> <i class="icon-angle-right"></i></li>
+						<li><a href="#">创建盘点计划</a></li>
+					</ul>
+					<!-- END PAGE TITLE & BREADCRUMB--><!-- ${request.contextPath}/plan/save.html -->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<form id="formID" action="" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+						<div class="form-body">
+						
+							<div class="form-group">
+								<label class="control-label col-md-3"><span class="required">*</span>计划名称：</label>
+								<div class="col-md-4">
+									<input type="text" placeholder="请输入计划名称" class="form-control" name="planName" id="planName"/>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label"><span class="required">*</span>盘点仓库：</label>
+								<div class="col-md-4">
+									<select class="form-control" name="checkWarehouse" id="checkWarehouse"> 
+										<option value="">请选择仓库</option> 
+										<!-- 这里添加盘点仓库的查询 -->
+										<#if warehouseInfos??> 
+										    <#list warehouseInfos as warehouseInfo>
+										   		 <option value="${warehouseInfo.id!}">${warehouseInfo.name!}</option>
+											</#list> 
+										</#if>
+									</select>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label col-md-3"><span class="required">*</span>盘点比例：</label>
+								<div class="col-md-4">
+									<input type="text" placeholder="盘点比例（0~100）" class="form-control" name="checkProportion" id="checkProportion"/>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-md-3 control-label"><span class="required">*</span>盘点物料：</label>
+								<div class="col-md-4">
+									<select class="form-control" name="checkMaterial" id="checkMaterial"></select>
+								</div>
+							</div>
+							
+						</div>
+						<div class="form-actions fluid">
+							<div class="col-md-offset-3 col-md-9">
+								<button type="submit" class="btn blue" id="a_submit_now">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+	
+	<#include "/foot.ftl"> 
+	<script>
+	    jQuery(document).ready(function() {
+	        App.init();
+	        
+	        var materielUrl = "/plan/getMateriel.html";
+	     	// ajax事件
+	     	function doAjax(url, data, callback) {
+	     		$.ajax({
+	     			url : url,
+	     			data : data,
+	     			async : false,
+	     			success : function(ajaxResult) {
+	     				if (ajaxResult.status == "-1") {
+	     					alert(ajaxResult.msg);
+	     				} else {
+	     					callback(ajaxResult.data);
+	     				}
+	     			},
+	     			error : function() {
+	     				alert("系统错误，显示错误");
+	     			}
+	     		});
+	     	}
+	     	// 设置物料
+	     	function setMateriel(data) {
+	     		$("#checkMaterial").html("<option value=''>请选择物料</option>");
+	     		if($("#checkWarehouse").val()!=""){
+	     			$("#checkMaterial").append("<option value='all'>全盘</option>");
+	     		}
+	     		for (var i = 0; i < data.length; i++) {
+	     			$("#checkMaterial").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+	     		}
+	     	}
+	     	// 仓库改变事件
+	     	$("#checkWarehouse").change(function() {
+	     		var warehouseId = $("#checkWarehouse").val();
+	     		if (warehouseId) {
+	     			doAjax(materielUrl, {warehouseId : warehouseId }, setMateriel);
+	     		} else {
+	     			setMateriel([]);
+	     		}
+	     	});
+	     	
+	     	
+
+	    	$("#a_submit_now").click(function(){
+	    		var _planName = $.trim($("#planName").val());
+	    		if (_planName.length == 0 || _planName == "请输入计划名称") {
+	    			alert("请输入计划名称！");
+	    			return false;
+	    		}
+
+	    		var _checkWarehouse = $("#checkWarehouse").val();
+	    		if (_checkWarehouse == "") {
+	    			alert("请选择盘点仓库！")
+	    			return false;
+	    		}
+	    		
+	            var _checkProportion = $.trim($("#checkProportion").val());
+	    		if (_checkProportion.length == 0 || _checkProportion == "盘点比例（0~100）") {
+	    			alert("请输入盘点比例！");
+	    			return false;
+	    		}
+	    		
+	    		var reg = /^(?:0|[1-9][0-9]?|100)$/;// 判断0~100的整数
+	    		if (!reg.test(_checkProportion)) {
+	    			alert("盘点比例的值为0~100的整数！");
+	    			return false;
+	    		}
+	    		
+	    		var _checkMaterial = $("#checkMaterial").val();
+	    		if (_checkMaterial == "" ) {
+	    			alert("请选择盘点物料！");
+	    			return false;
+	    		}
+	    		
+	    		$.ajax({
+	    			type : "POST",
+	    			url : "/plan/save.html",
+	    			dataType : "json",
+	    			data : {
+	    				planName:_planName,
+	    				checkWarehouse:_checkWarehouse,
+	    				checkProportion:_checkProportion,
+	    				checkMaterial:_checkMaterial
+	    			},
+	     			success : function(ajaxResult) {
+	     				if(ajaxResult.status=="1"){
+	     					confirm('提示','盘点计划保存成功，返回盘点计划列表？',function(status){
+     							if(status){
+     								window.location.href=ajaxResult.toUrl;
+     							}else{
+     								window.location.href = "/plan/add.html";
+     							}
+	     					});
+	     				}
+	     				else{
+	     					alert(ajaxResult.msg);
+	     				}
+	     			},
+	     			error : function() {
+	     				alert("保存错误，请稍后再试！");
+	     			}
+	     		});
+	    		    
+	    		return false ; 
+	    		
+	    	});
+	     	
+	    });
+    </script> 
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

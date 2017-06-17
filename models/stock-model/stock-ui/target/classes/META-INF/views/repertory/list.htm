@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<html>
+<head>
+    <title>仓库列表</title>
+<#include "/head.ftl">
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-header-fixed">
+
+<#include "/page_head.ftl">
+
+<div class="clearfix"></div>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+<#include "/page_sidebar.ftl">
+    <!-- BEGIN PAGE -->
+    <div class="page-content">
+    <#-- //TODO inert main content into here  -->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <ul class="page-breadcrumb breadcrumb">
+                    <li class="btn-group">
+                        <a class="btn blue dropdown-toggle" href="${request.contextPath}/repertory/preadd.html">新增</a>
+                    </li>
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="${request.contextPath}">首页</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="${request.contextPath}/repertory/list.html">仓库管理</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="${request.contextPath}/repertory/list.html">仓库列表</a></li>
+                </ul>
+                <div class="portlet-body">
+                    <form action="${request.contextPath}/repertory/searchWarehouse.html" method="post">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="schineseName">仓库名称</label>
+                                    <input type="text" class="form-control" id="schineseName" value="${warehouse.name!}"
+                                           placeholder="请输入仓库名称" name="name" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="sdomainSimpleName">仓库地址</label>
+                                    <input type="text" class="form-control" id="sdomainSimpleName"
+                                           value="${warehouse.address!}"
+                                           placeholder="请输入仓库地址" name="address">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="sCurrentAreaLevel">管理员</label>
+                                    <select class="form-control" id="sCurrentAreaLevel" name="warehouseKeeper"
+                                            value="${warehouse.warehouseKeeper!}">
+                                        <option value="${warehouse.warehouseKeeper!}">${warehouse.warehouseKeeper!}</option>
+                                    <#if manList??>
+                                        <#list manList as manager>
+                                            <#if warehouse.warehouseKeeper != "">
+                                                <#if manager.warehouseKeeper != warehouse.warehouseKeeper>
+                                                    <option value="${manager.warehouseKeeper!}">${manager.warehouseKeeper!}</option>
+                                                </#if>
+                                            <#else>
+                                                <option value="${manager.warehouseKeeper!}">${manager.warehouseKeeper!}</option>
+                                            </#if>
+                                        </#list>
+                                    </#if>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn blue btn-block">查询<i
+                                        class="m-icon-swapright m-icon-white"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-5"></div>
+                        </div>
+
+                    </form>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                            <tr>
+                                <th>仓库名称</th>
+                                <th>所在地址</th>
+                                <th>管理员</th>
+                                <th>创建时间</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                        <tbody>
+                        <#if warehouseList??>
+                            <#list warehouseList.list as warehouseList>
+                            <tr>
+                                <td>${warehouseList.name!}</td>
+                                <td>${warehouseList.address!}</td>
+                                <td>${warehouseList.warehouseKeeper!}</td>
+                                <td>${warehouseList.createTime?string("yyyy-MM-dd")}</td>
+                                <td>${warehouseList.remark!}</td>
+                                <td>
+                                    <a href="${request.contextPath}/repertory/preupdate.html?id=${warehouseList.id!}"
+                                       class="btn default btn-xs purple">编辑</a>
+                                    <a class="btn default btn-xs grey delThis" id="${warehouseList.id!}">删除</a>
+                                    <input type="hidden" id="warehouseID" value="${warehouseList.id!}"/>
+                                </td>
+                            </tr>
+                            </#list>
+                        </tbody>
+                        </#if>
+                        </table>
+                    </div>
+                <@page result=warehouseList></@page>
+
+                </div>
+                <input type="hidden" name="message" value="${message!}" />
+            </div>
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
+<#include "/foot.ftl">
+<#include "/scripts.ftl">
+<script>
+    jQuery(document).ready(function () {
+        App.init(); // initlayout and core plugins
+        $(".delThis").click(function () {
+            var delObj = $(this);
+            confirm("删除仓库", "你正在删除该仓库，确定要删除吗？", function (status) {
+                if (status == true) {
+                    var toDelId = delObj.attr("id");
+                    var param = "id=" + toDelId;
+                    $.ajax({
+                        type: "post",
+                        url: "/repertory/remove.html",
+                        data: param ,
+                        async: false,
+                        success: function (result) {
+                            if(result == "false"){
+                                alert("该仓库存在物料，删除失败，请先清空物料");
+                            }else{
+                                alert("该仓库无物料，删除成功");
+                                delObj.parent().parent().remove();
+                            }
+                        }
+                    });
+                } else {
+
+                }
+            });
+        });
+    });
+</script>
+
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
